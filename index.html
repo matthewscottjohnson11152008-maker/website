@@ -293,18 +293,226 @@
 <section id="reviews">
   <p class="label">What Customers Say</p>
   <h2>Reviews</h2>
-  <p style="color:var(--muted)">Real feedback from real customers in the Grand Rapids area.</p>
+  <p style="color:var(--muted)">Real reviews from verified customers in the Grand Rapids area.</p>
 
-  <div style="border:1px solid var(--border);background:var(--surface);padding:3rem 2rem;text-align:center;margin-top:2rem;">
-    <p style="color:var(--muted);font-size:1rem;">Reviews coming soon. Be the first to share your experience!</p>
+  <!-- LIVE REVIEWS — loaded from Cloudflare KV -->
+  <div id="reviews-container" style="margin-top:2rem;display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);">
+    <div id="reviews-loading" style="background:var(--surface);padding:2rem;text-align:center;color:var(--muted);">Loading reviews...</div>
   </div>
 
-  <div class="review-cta">
-    <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem;">Had your knives sharpened by Matthew? Leave a review and help others find Vanguard Sharpening.</p>
-    <a class="btn" href="mailto:vanguardsharpening88@gmail.com?subject=Review%20for%20Vanguard%20Sharpening">Submit Your Review</a>
+  <!-- CUSTOMER SUBMISSION FORM -->
+  <div style="margin-top:2rem;border:1px solid var(--border);background:var(--surface);padding:2rem;">
+    <p style="color:var(--gold);font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem;font-weight:600;">Leave a Review</p>
+    <p style="color:var(--muted);font-size:.88rem;margin-bottom:1.6rem;">Reviews are verified before being published.</p>
+
+    <div style="margin-bottom:1rem;">
+      <label style="color:var(--muted);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:.4rem;">Your Name</label>
+      <input id="r-name" type="text" placeholder="e.g. John D., Grand Rapids" style="background:#0d0d0d;border:1px solid var(--border);color:var(--white);padding:.6rem 1rem;font-size:.9rem;font-family:inherit;width:100%;max-width:400px;" />
+    </div>
+
+    <div style="margin-bottom:1rem;">
+      <label style="color:var(--muted);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:.5rem;">Rating</label>
+      <div style="display:flex;gap:.5rem;font-size:2rem;cursor:pointer;">
+        <span onclick="setStar(1)" class="star" data-val="1">☆</span>
+        <span onclick="setStar(2)" class="star" data-val="2">☆</span>
+        <span onclick="setStar(3)" class="star" data-val="3">☆</span>
+        <span onclick="setStar(4)" class="star" data-val="4">☆</span>
+        <span onclick="setStar(5)" class="star" data-val="5">☆</span>
+      </div>
+      <input type="hidden" id="r-stars" value="5" />
+    </div>
+
+    <div style="margin-bottom:1.5rem;">
+      <label style="color:var(--muted);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:.4rem;">Your Review</label>
+      <textarea id="r-text" rows="4" placeholder="Tell others about your experience..." style="background:#0d0d0d;border:1px solid var(--border);color:var(--white);padding:.6rem 1rem;font-size:.9rem;font-family:inherit;width:100%;max-width:560px;resize:vertical;line-height:1.7;"></textarea>
+    </div>
+
+    <button onclick="submitReview()" style="background:var(--gold);color:#0d0d0d;border:none;padding:.75rem 2.2rem;font-size:.82rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;font-family:inherit;">Submit Review</button>
+    <p id="success-msg" style="color:#5c5;font-size:.92rem;margin-top:1.2rem;display:none;">&#10003; Thanks! Your review has been submitted and will appear once verified.</p>
+    <p id="error-msg" style="color:#e55;font-size:.9rem;margin-top:1rem;display:none;">Please fill in your name and review.</p>
+  </div>
+
+  <!-- ADMIN PANEL — hidden gear icon, only Matthew knows it's there -->
+  <div style="margin-top:.8rem;text-align:right;">
+    <button onclick="toggleAdmin()" style="background:none;border:none;color:#2a2a2a;font-size:.9rem;cursor:pointer;padding:.2rem .5rem;" title="Admin">&#9881;</button>
+  </div>
+  <div id="admin-area" style="display:none;margin-top:.5rem;border:1px solid rgba(201,168,76,0.25);background:var(--surface);padding:2rem;">
+    <div id="admin-gate">
+      <p style="color:var(--muted);font-size:.88rem;margin-bottom:1rem;">Admin access only.</p>
+      <input id="admin-pw" type="password" placeholder="Password" style="background:#0d0d0d;border:1px solid var(--border);color:var(--white);padding:.6rem 1rem;font-size:.9rem;font-family:inherit;width:180px;margin-right:.6rem;" />
+      <button onclick="unlockAdmin()" style="background:var(--gold);color:#0d0d0d;border:none;padding:.6rem 1.2rem;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:.1em;text-transform:uppercase;">Enter</button>
+      <p id="pw-wrong" style="color:#e55;font-size:.85rem;margin-top:.6rem;display:none;">Incorrect password.</p>
+    </div>
+    <div id="admin-content" style="display:none;">
+      <p style="color:var(--gold);font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.2rem;font-weight:600;">Pending Reviews</p>
+      <div id="pending-list"></div>
+      <p style="color:var(--gold);font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:1rem;margin-top:2rem;font-weight:600;">Live Reviews</p>
+      <div id="live-list"></div>
+    </div>
   </div>
 </section>
 
+<style>
+  .star { color:#555; transition:color .15s; user-select:none; }
+  .star.lit { color:var(--gold); }
+  .rv-card { background:var(--surface); padding:1.6rem 1.8rem; display:flex; flex-direction:column; gap:.6rem; }
+  .rv-stars { color:var(--gold); font-size:1rem; }
+  .rv-text { font-size:.95rem; color:var(--text); line-height:1.8; font-style:italic; margin:0; }
+  .rv-author { font-size:.78rem; color:var(--gold); font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
+  .p-card { background:#111; border:1px solid rgba(201,168,76,0.15); padding:1.2rem 1.4rem; margin-bottom:.8rem; border-radius:2px; }
+  .p-card p { font-size:.9rem; color:var(--text); margin-bottom:.5rem; line-height:1.7; }
+  .p-card .p-meta { color:var(--gold); font-size:.78rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; margin-bottom:.6rem; }
+  .btn-approve { background:#2a7a3a; color:#fff; border:none; padding:.45rem 1rem; font-size:.78rem; font-weight:600; cursor:pointer; margin-right:.5rem; font-family:inherit; letter-spacing:.06em; text-transform:uppercase; }
+  .btn-reject  { background:#7a2a2a; color:#fff; border:none; padding:.45rem 1rem; font-size:.78rem; font-weight:600; cursor:pointer; font-family:inherit; letter-spacing:.06em; text-transform:uppercase; }
+  .btn-delete  { background:none; border:1px solid #555; color:#888; padding:.35rem .8rem; font-size:.75rem; cursor:pointer; font-family:inherit; margin-top:.5rem; }
+  .btn-delete:hover { border-color:#e55; color:#e55; }
+</style>
+
+<script>
+  const WORKER = 'YOUR_WORKER_URL';
+  const ADMIN_PW = 'vanguard2024admin';
+  let selectedStars = 5;
+  let adminUnlocked = false;
+
+  function setStar(val) {
+    selectedStars = val;
+    document.getElementById('r-stars').value = val;
+    document.querySelectorAll('.star').forEach(s => {
+      const v = parseInt(s.dataset.val);
+      s.classList.toggle('lit', v <= val);
+      s.textContent = v <= val ? '★' : '☆';
+    });
+  }
+
+  async function loadReviews() {
+    try {
+      const res = await fetch(WORKER);
+      const reviews = await res.json();
+      const container = document.getElementById('reviews-container');
+      if (!reviews.length) {
+        container.innerHTML = '<div style="background:var(--surface);padding:3rem 2rem;text-align:center;color:var(--muted);">No reviews yet — be the first!</div>';
+        return;
+      }
+      container.innerHTML = reviews.map(r => `
+        <div class="rv-card">
+          <div class="rv-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+          <p class="rv-text">"${r.text}"</p>
+          <div class="rv-author">— ${r.name}</div>
+        </div>
+      `).join('');
+    } catch(e) {
+      document.getElementById('reviews-loading').textContent = 'Unable to load reviews right now.';
+    }
+  }
+
+  async function submitReview() {
+    const name = document.getElementById('r-name').value.trim();
+    const text = document.getElementById('r-text').value.trim();
+    document.getElementById('error-msg').style.display = 'none';
+    document.getElementById('success-msg').style.display = 'none';
+    if (!name || !text) { document.getElementById('error-msg').style.display = 'block'; return; }
+    try {
+      const res = await fetch(WORKER, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, stars: selectedStars, text })
+      });
+      if (res.ok) {
+        document.getElementById('r-name').value = '';
+        document.getElementById('r-text').value = '';
+        setStar(5);
+        document.getElementById('success-msg').style.display = 'block';
+      }
+    } catch(e) {
+      document.getElementById('error-msg').textContent = 'Something went wrong. Please try again.';
+      document.getElementById('error-msg').style.display = 'block';
+    }
+  }
+
+  function toggleAdmin() {
+    const a = document.getElementById('admin-area');
+    a.style.display = a.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function unlockAdmin() {
+    if (document.getElementById('admin-pw').value === ADMIN_PW) {
+      adminUnlocked = true;
+      document.getElementById('admin-gate').style.display = 'none';
+      document.getElementById('admin-content').style.display = 'block';
+      loadPending();
+      loadLiveAdmin();
+    } else {
+      document.getElementById('pw-wrong').style.display = 'block';
+    }
+  }
+
+  async function loadPending() {
+    try {
+      const res = await fetch(WORKER + '?action=pending&adminKey=' + ADMIN_PW);
+      const pending = await res.json();
+      const list = document.getElementById('pending-list');
+      if (!pending.length) {
+        list.innerHTML = '<p style="color:var(--muted);font-size:.9rem;">No pending reviews.</p>';
+        return;
+      }
+      list.innerHTML = pending.map((r, i) => `
+        <div class="p-card">
+          <div class="p-meta">${r.name} &nbsp; ${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+          <p>${r.text}</p>
+          <button class="btn-approve" onclick="approveReview(${i})">&#10003; Approve</button>
+          <button class="btn-reject" onclick="rejectReview(${i})">&#10005; Reject</button>
+        </div>
+      `).join('');
+    } catch(e) {}
+  }
+
+  async function loadLiveAdmin() {
+    try {
+      const res = await fetch(WORKER);
+      const reviews = await res.json();
+      const list = document.getElementById('live-list');
+      if (!reviews.length) { list.innerHTML = '<p style="color:var(--muted);font-size:.9rem;">No live reviews yet.</p>'; return; }
+      list.innerHTML = reviews.map((r, i) => `
+        <div class="p-card">
+          <div class="p-meta">${r.name} &nbsp; ${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+          <p>${r.text}</p>
+          <button class="btn-delete" onclick="deleteReview(${i})">&#10005; Remove</button>
+        </div>
+      `).join('');
+    } catch(e) {}
+  }
+
+  async function approveReview(index) {
+    try {
+      await fetch(WORKER + '?action=approve&index=' + index + '&adminKey=' + ADMIN_PW, { method: 'POST' });
+      loadPending();
+      loadLiveAdmin();
+      loadReviews();
+    } catch(e) {}
+  }
+
+  async function rejectReview(index) {
+    try {
+      await fetch(WORKER + '?action=reject&index=' + index + '&adminKey=' + ADMIN_PW, { method: 'POST' });
+      loadPending();
+    } catch(e) {}
+  }
+
+  async function deleteReview(index) {
+    if (!confirm('Remove this review from the live site?')) return;
+    try {
+      await fetch(WORKER + '?action=delete&index=' + index + '&adminKey=' + ADMIN_PW, { method: 'POST' });
+      loadLiveAdmin();
+      loadReviews();
+    } catch(e) {}
+  }
+
+  setStar(5);
+  loadReviews();
+</script>
+
 <footer>&copy; 2026 Vanguard Sharpening &middot; Matthew Johnson</footer>
+
+
 </body>
 </html>
