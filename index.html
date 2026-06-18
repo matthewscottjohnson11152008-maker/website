@@ -340,62 +340,58 @@
   .rv-stars { color:var(--gold); font-size:1rem; }
   .rv-text { font-size:.95rem; color:var(--text); line-height:1.8; font-style:italic; margin:0; }
   .rv-author { font-size:.78rem; color:var(--gold); font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
-  #submit-btn:active, #submit-btn.clicked {
-    background: transparent !important;
-    color: var(--gold) !important;
-  }
+  #submit-btn.clicked { background:transparent; color:var(--gold); }
 </style>
 
 <script>
-  let selectedStars = 5;
-  const BIN_ID = 'vs_shared_reviews';
+  var selectedStars = 5;
+  var NPOINT = 'https://api.npoint.io/7b46603c7457b0775a5a';
 
   function setStar(val) {
     selectedStars = val;
     document.getElementById('r-stars').value = val;
-    document.querySelectorAll('.star').forEach(s => {
-      const v = parseInt(s.dataset.val);
-      s.classList.toggle('lit', v <= val);
-      s.textContent = v <= val ? '★' : '☆';
+    document.querySelectorAll('.star').forEach(function(s) {
+      var v = parseInt(s.dataset.val);
+      if (v <= val) { s.classList.add('lit'); s.textContent = '★'; }
+      else { s.classList.remove('lit'); s.textContent = '☆'; }
     });
   }
 
-  // Use JSONBin.io as a free shared database — visible to ALL visitors
-  const BIN_URL = 'https://api.npoint.io/7b46603c7457b0775a5a';
-  const BIN_KEY = '';
-
-  async function loadReviews() {
-    const container = document.getElementById('reviews-container');
-    const noRv = document.getElementById('no-reviews');
-    try {
-      const res = await fetch(BIN_URL);
-      const reviews = await res.json() || [];
-      container.querySelectorAll('.rv-card').forEach(c => c.remove());
-      if (!reviews.length) {
+  function loadReviews() {
+    var container = document.getElementById('reviews-container');
+    var noRv = document.getElementById('no-reviews');
+    fetch(NPOINT)
+      .then(function(r) { return r.json(); })
+      .then(function(reviews) {
+        container.querySelectorAll('.rv-card').forEach(function(c) { c.remove(); });
+        if (!reviews || !reviews.length) {
+          noRv.innerHTML = '<p>No reviews yet — be the first!</p>';
+          noRv.style.display = 'block';
+          return;
+        }
+        noRv.style.display = 'none';
+        reviews.forEach(function(r) {
+          var card = document.createElement('div');
+          card.className = 'rv-card';
+          var stars = '★'.repeat(r.stars) + '☆'.repeat(5 - r.stars);
+          card.innerHTML =
+            '<div class="rv-stars">' + stars + '</div>' +
+            '<p class="rv-text">“' + r.text + '”</p>' +
+            '<div class="rv-author">— ' + r.name + '</div>';
+          container.appendChild(card);
+        });
+      })
+      .catch(function() {
         noRv.innerHTML = '<p>No reviews yet — be the first!</p>';
         noRv.style.display = 'block';
-        return;
-      }
-      noRv.style.display = 'none';
-      reviews.forEach(r => {
-        const card = document.createElement('div');
-        card.className = 'rv-card';
-        card.innerHTML =
-          '<div class="rv-stars">' + '★'.repeat(r.stars) + '☆'.repeat(5 - r.stars) + '</div>' +
-          '<p class="rv-text">“' + r.text + '”</p>' +
-          '<div class="rv-author">— ' + r.name + '</div>';
-        container.appendChild(card);
       });
-    } catch(e) {
-      noRv.innerHTML = '<p>No reviews yet — be the first!</p>';
-      noRv.style.display = 'block';
-    }
   }
 
-  async function addReview() {
-    const name = document.getElementById('r-name').value.trim();
-    const text = document.getElementById('r-text').value.trim();
-    const btn = document.getElementById('submit-btn');
+  function addReview() {
+    var name = document.getElementById('r-name').value.trim();
+    var text = document.getElementById('r-text').value.trim();
+    var stars = selectedStars;
+    var btn = document.getElementById('submit-btn');
     document.getElementById('error-msg').style.display = 'none';
     document.getElementById('success-msg').style.display = 'none';
 
@@ -404,45 +400,39 @@
       return;
     }
 
-    // Invert button immediately on click
     btn.classList.add('clicked');
     btn.textContent = 'Posting...';
     btn.disabled = true;
 
-    try {
-      // Get current reviews
-      const res = await fetch(BIN_URL);
-      const reviews = await res.json() || [];
-
-      // Add new review at top
-      reviews.unshift({ name, stars: selectedStars, text });
-
-      // Save back
-      await fetch(BIN_URL, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Master-Key': BIN_KEY
-        },
-        body: JSON.stringify(reviews)
+    fetch(NPOINT)
+      .then(function(r) { return r.json(); })
+      .then(function(reviews) {
+        if (!Array.isArray(reviews)) reviews = [];
+        reviews.unshift({ name: name, stars: stars, text: text });
+        return fetch(NPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(reviews)
+        });
+      })
+      .then(function() {
+        document.getElementById('r-name').value = '';
+        document.getElementById('r-text').value = '';
+        setStar(5);
+        btn.classList.remove('clicked');
+        btn.textContent = 'Post Review';
+        btn.disabled = false;
+        document.getElementById('success-msg').style.display = 'block';
+        setTimeout(function() { document.getElementById('success-msg').style.display = 'none'; }, 4000);
+        loadReviews();
+      })
+      .catch(function() {
+        btn.classList.remove('clicked');
+        btn.textContent = 'Post Review';
+        btn.disabled = false;
+        document.getElementById('error-msg').textContent = 'Something went wrong. Please try again.';
+        document.getElementById('error-msg').style.display = 'block';
       });
-
-      document.getElementById('r-name').value = '';
-      document.getElementById('r-text').value = '';
-      setStar(5);
-      btn.classList.remove('clicked');
-      btn.textContent = 'Post Review';
-      btn.disabled = false;
-      document.getElementById('success-msg').style.display = 'block';
-      setTimeout(() => document.getElementById('success-msg').style.display = 'none', 4000);
-      loadReviews();
-    } catch(e) {
-      btn.classList.remove('clicked');
-      btn.textContent = 'Post Review';
-      btn.disabled = false;
-      document.getElementById('error-msg').textContent = 'Something went wrong. Please try again.';
-      document.getElementById('error-msg').style.display = 'block';
-    }
   }
 
   setStar(5);
