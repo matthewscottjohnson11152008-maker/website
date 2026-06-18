@@ -293,17 +293,17 @@
 <section id="reviews">
   <p class="label">What Customers Say</p>
   <h2>Reviews</h2>
-  <p style="color:var(--muted)">Real reviews from verified customers in the Grand Rapids area.</p>
+  <p style="color:var(--muted)">Real reviews from real customers in the Grand Rapids area.</p>
 
-  <!-- LIVE REVIEWS — loaded from Cloudflare KV -->
   <div id="reviews-container" style="margin-top:2rem;display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);">
-    <div id="reviews-loading" style="background:var(--surface);padding:2rem;text-align:center;color:var(--muted);">Loading reviews...</div>
+    <div id="no-reviews" style="background:var(--surface);padding:3rem 2rem;text-align:center;color:var(--muted);">
+      <p>Loading reviews...</p>
+    </div>
   </div>
 
-  <!-- CUSTOMER SUBMISSION FORM -->
   <div style="margin-top:2rem;border:1px solid var(--border);background:var(--surface);padding:2rem;">
     <p style="color:var(--gold);font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem;font-weight:600;">Leave a Review</p>
-    <p style="color:var(--muted);font-size:.88rem;margin-bottom:1.6rem;">Reviews are verified before being published.</p>
+    <p style="color:var(--muted);font-size:.88rem;margin-bottom:1.6rem;">Share your experience with Vanguard Sharpening.</p>
 
     <div style="margin-bottom:1rem;">
       <label style="color:var(--muted);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:.4rem;">Your Name</label>
@@ -313,11 +313,11 @@
     <div style="margin-bottom:1rem;">
       <label style="color:var(--muted);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:.5rem;">Rating</label>
       <div style="display:flex;gap:.5rem;font-size:2rem;cursor:pointer;">
-        <span onclick="setStar(1)" class="star" data-val="1">☆</span>
-        <span onclick="setStar(2)" class="star" data-val="2">☆</span>
-        <span onclick="setStar(3)" class="star" data-val="3">☆</span>
-        <span onclick="setStar(4)" class="star" data-val="4">☆</span>
-        <span onclick="setStar(5)" class="star" data-val="5">☆</span>
+        <span onclick="setStar(1)" class="star" data-val="1">&#9734;</span>
+        <span onclick="setStar(2)" class="star" data-val="2">&#9734;</span>
+        <span onclick="setStar(3)" class="star" data-val="3">&#9734;</span>
+        <span onclick="setStar(4)" class="star" data-val="4">&#9734;</span>
+        <span onclick="setStar(5)" class="star" data-val="5">&#9734;</span>
       </div>
       <input type="hidden" id="r-stars" value="5" />
     </div>
@@ -327,28 +327,9 @@
       <textarea id="r-text" rows="4" placeholder="Tell others about your experience..." style="background:#0d0d0d;border:1px solid var(--border);color:var(--white);padding:.6rem 1rem;font-size:.9rem;font-family:inherit;width:100%;max-width:560px;resize:vertical;line-height:1.7;"></textarea>
     </div>
 
-    <button onclick="submitReview()" style="background:var(--gold);color:#0d0d0d;border:none;padding:.75rem 2.2rem;font-size:.82rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;font-family:inherit;">Submit Review</button>
-    <p id="success-msg" style="color:#5c5;font-size:.92rem;margin-top:1.2rem;display:none;">&#10003; Thanks! Your review has been submitted and will appear once verified.</p>
+    <button id="submit-btn" onclick="addReview()" style="background:var(--gold);color:#0d0d0d;border:1px solid var(--gold);padding:.75rem 2.2rem;font-size:.82rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:background .2s,color .2s;">Post Review</button>
+    <p id="success-msg" style="color:#5c5;font-size:.92rem;margin-top:1.2rem;display:none;">&#10003; Your review has been posted!</p>
     <p id="error-msg" style="color:#e55;font-size:.9rem;margin-top:1rem;display:none;">Please fill in your name and review.</p>
-  </div>
-
-  <!-- ADMIN PANEL — hidden gear icon, only Matthew knows it's there -->
-  <div style="margin-top:.8rem;text-align:right;">
-    <button onclick="toggleAdmin()" style="background:none;border:none;color:#2a2a2a;font-size:.9rem;cursor:pointer;padding:.2rem .5rem;" title="Admin">&#9881;</button>
-  </div>
-  <div id="admin-area" style="display:none;margin-top:.5rem;border:1px solid rgba(201,168,76,0.25);background:var(--surface);padding:2rem;">
-    <div id="admin-gate">
-      <p style="color:var(--muted);font-size:.88rem;margin-bottom:1rem;">Admin access only.</p>
-      <input id="admin-pw" type="password" placeholder="Password" style="background:#0d0d0d;border:1px solid var(--border);color:var(--white);padding:.6rem 1rem;font-size:.9rem;font-family:inherit;width:180px;margin-right:.6rem;" />
-      <button onclick="unlockAdmin()" style="background:var(--gold);color:#0d0d0d;border:none;padding:.6rem 1.2rem;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:.1em;text-transform:uppercase;">Enter</button>
-      <p id="pw-wrong" style="color:#e55;font-size:.85rem;margin-top:.6rem;display:none;">Incorrect password.</p>
-    </div>
-    <div id="admin-content" style="display:none;">
-      <p style="color:var(--gold);font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.2rem;font-weight:600;">Pending Reviews</p>
-      <div id="pending-list"></div>
-      <p style="color:var(--gold);font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:1rem;margin-top:2rem;font-weight:600;">Live Reviews</p>
-      <div id="live-list"></div>
-    </div>
   </div>
 </section>
 
@@ -359,20 +340,15 @@
   .rv-stars { color:var(--gold); font-size:1rem; }
   .rv-text { font-size:.95rem; color:var(--text); line-height:1.8; font-style:italic; margin:0; }
   .rv-author { font-size:.78rem; color:var(--gold); font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
-  .p-card { background:#111; border:1px solid rgba(201,168,76,0.15); padding:1.2rem 1.4rem; margin-bottom:.8rem; border-radius:2px; }
-  .p-card p { font-size:.9rem; color:var(--text); margin-bottom:.5rem; line-height:1.7; }
-  .p-card .p-meta { color:var(--gold); font-size:.78rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; margin-bottom:.6rem; }
-  .btn-approve { background:#2a7a3a; color:#fff; border:none; padding:.45rem 1rem; font-size:.78rem; font-weight:600; cursor:pointer; margin-right:.5rem; font-family:inherit; letter-spacing:.06em; text-transform:uppercase; }
-  .btn-reject  { background:#7a2a2a; color:#fff; border:none; padding:.45rem 1rem; font-size:.78rem; font-weight:600; cursor:pointer; font-family:inherit; letter-spacing:.06em; text-transform:uppercase; }
-  .btn-delete  { background:none; border:1px solid #555; color:#888; padding:.35rem .8rem; font-size:.75rem; cursor:pointer; font-family:inherit; margin-top:.5rem; }
-  .btn-delete:hover { border-color:#e55; color:#e55; }
+  #submit-btn:active, #submit-btn.clicked {
+    background: transparent !important;
+    color: var(--gold) !important;
+  }
 </style>
 
 <script>
-  const WORKER = 'YOUR_WORKER_URL';
-  const ADMIN_PW = 'vanguard2024admin';
   let selectedStars = 5;
-  let adminUnlocked = false;
+  const BIN_ID = 'vs_shared_reviews';
 
   function setStar(val) {
     selectedStars = val;
@@ -384,127 +360,89 @@
     });
   }
 
+  // Use JSONBin.io as a free shared database — visible to ALL visitors
+  const BIN_URL = 'https://api.npoint.io/7b46603c7457b0775a5a';
+  const BIN_KEY = '';
+
   async function loadReviews() {
+    const container = document.getElementById('reviews-container');
+    const noRv = document.getElementById('no-reviews');
     try {
-      const res = await fetch(WORKER);
-      const reviews = await res.json();
-      const container = document.getElementById('reviews-container');
+      const res = await fetch(BIN_URL);
+      const reviews = await res.json() || [];
+      container.querySelectorAll('.rv-card').forEach(c => c.remove());
       if (!reviews.length) {
-        container.innerHTML = '<div style="background:var(--surface);padding:3rem 2rem;text-align:center;color:var(--muted);">No reviews yet — be the first!</div>';
+        noRv.innerHTML = '<p>No reviews yet — be the first!</p>';
+        noRv.style.display = 'block';
         return;
       }
-      container.innerHTML = reviews.map(r => `
-        <div class="rv-card">
-          <div class="rv-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
-          <p class="rv-text">"${r.text}"</p>
-          <div class="rv-author">— ${r.name}</div>
-        </div>
-      `).join('');
+      noRv.style.display = 'none';
+      reviews.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'rv-card';
+        card.innerHTML =
+          '<div class="rv-stars">' + '★'.repeat(r.stars) + '☆'.repeat(5 - r.stars) + '</div>' +
+          '<p class="rv-text">“' + r.text + '”</p>' +
+          '<div class="rv-author">— ' + r.name + '</div>';
+        container.appendChild(card);
+      });
     } catch(e) {
-      document.getElementById('reviews-loading').textContent = 'Unable to load reviews right now.';
+      noRv.innerHTML = '<p>No reviews yet — be the first!</p>';
+      noRv.style.display = 'block';
     }
   }
 
-  async function submitReview() {
+  async function addReview() {
     const name = document.getElementById('r-name').value.trim();
     const text = document.getElementById('r-text').value.trim();
+    const btn = document.getElementById('submit-btn');
     document.getElementById('error-msg').style.display = 'none';
     document.getElementById('success-msg').style.display = 'none';
-    if (!name || !text) { document.getElementById('error-msg').style.display = 'block'; return; }
+
+    if (!name || !text) {
+      document.getElementById('error-msg').style.display = 'block';
+      return;
+    }
+
+    // Invert button immediately on click
+    btn.classList.add('clicked');
+    btn.textContent = 'Posting...';
+    btn.disabled = true;
+
     try {
-      const res = await fetch(WORKER, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, stars: selectedStars, text })
+      // Get current reviews
+      const res = await fetch(BIN_URL);
+      const reviews = await res.json() || [];
+
+      // Add new review at top
+      reviews.unshift({ name, stars: selectedStars, text });
+
+      // Save back
+      await fetch(BIN_URL, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': BIN_KEY
+        },
+        body: JSON.stringify(reviews)
       });
-      if (res.ok) {
-        document.getElementById('r-name').value = '';
-        document.getElementById('r-text').value = '';
-        setStar(5);
-        document.getElementById('success-msg').style.display = 'block';
-      }
+
+      document.getElementById('r-name').value = '';
+      document.getElementById('r-text').value = '';
+      setStar(5);
+      btn.classList.remove('clicked');
+      btn.textContent = 'Post Review';
+      btn.disabled = false;
+      document.getElementById('success-msg').style.display = 'block';
+      setTimeout(() => document.getElementById('success-msg').style.display = 'none', 4000);
+      loadReviews();
     } catch(e) {
+      btn.classList.remove('clicked');
+      btn.textContent = 'Post Review';
+      btn.disabled = false;
       document.getElementById('error-msg').textContent = 'Something went wrong. Please try again.';
       document.getElementById('error-msg').style.display = 'block';
     }
-  }
-
-  function toggleAdmin() {
-    const a = document.getElementById('admin-area');
-    a.style.display = a.style.display === 'none' ? 'block' : 'none';
-  }
-
-  function unlockAdmin() {
-    if (document.getElementById('admin-pw').value === ADMIN_PW) {
-      adminUnlocked = true;
-      document.getElementById('admin-gate').style.display = 'none';
-      document.getElementById('admin-content').style.display = 'block';
-      loadPending();
-      loadLiveAdmin();
-    } else {
-      document.getElementById('pw-wrong').style.display = 'block';
-    }
-  }
-
-  async function loadPending() {
-    try {
-      const res = await fetch(WORKER + '?action=pending&adminKey=' + ADMIN_PW);
-      const pending = await res.json();
-      const list = document.getElementById('pending-list');
-      if (!pending.length) {
-        list.innerHTML = '<p style="color:var(--muted);font-size:.9rem;">No pending reviews.</p>';
-        return;
-      }
-      list.innerHTML = pending.map((r, i) => `
-        <div class="p-card">
-          <div class="p-meta">${r.name} &nbsp; ${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
-          <p>${r.text}</p>
-          <button class="btn-approve" onclick="approveReview(${i})">&#10003; Approve</button>
-          <button class="btn-reject" onclick="rejectReview(${i})">&#10005; Reject</button>
-        </div>
-      `).join('');
-    } catch(e) {}
-  }
-
-  async function loadLiveAdmin() {
-    try {
-      const res = await fetch(WORKER);
-      const reviews = await res.json();
-      const list = document.getElementById('live-list');
-      if (!reviews.length) { list.innerHTML = '<p style="color:var(--muted);font-size:.9rem;">No live reviews yet.</p>'; return; }
-      list.innerHTML = reviews.map((r, i) => `
-        <div class="p-card">
-          <div class="p-meta">${r.name} &nbsp; ${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
-          <p>${r.text}</p>
-          <button class="btn-delete" onclick="deleteReview(${i})">&#10005; Remove</button>
-        </div>
-      `).join('');
-    } catch(e) {}
-  }
-
-  async function approveReview(index) {
-    try {
-      await fetch(WORKER + '?action=approve&index=' + index + '&adminKey=' + ADMIN_PW, { method: 'POST' });
-      loadPending();
-      loadLiveAdmin();
-      loadReviews();
-    } catch(e) {}
-  }
-
-  async function rejectReview(index) {
-    try {
-      await fetch(WORKER + '?action=reject&index=' + index + '&adminKey=' + ADMIN_PW, { method: 'POST' });
-      loadPending();
-    } catch(e) {}
-  }
-
-  async function deleteReview(index) {
-    if (!confirm('Remove this review from the live site?')) return;
-    try {
-      await fetch(WORKER + '?action=delete&index=' + index + '&adminKey=' + ADMIN_PW, { method: 'POST' });
-      loadLiveAdmin();
-      loadReviews();
-    } catch(e) {}
   }
 
   setStar(5);
