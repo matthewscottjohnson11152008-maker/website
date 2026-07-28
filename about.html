@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Matthew - Vanguard Sharpening</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --border: rgba(201, 168, 76, 0.18);
+      --gold: #c9a84c;
+      --gold-lt: #e8cb6a;
+      --text: #c8c8c8;
+      --muted: #767676;
+      --white: #f0f0f0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(13, 13, 13, 0.96);
+      backdrop-filter: blur(6px);
+      z-index: 50;
+    }
+
+    .nav-brand {
+      font-family: 'Cinzel', serif;
+      font-size: .85rem;
+      letter-spacing: .14em;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    .profile-section {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 3rem;
+      align-items: start;
+      margin-top: 1rem;
+      margin-bottom: 4rem;
+    }
+
+    @media (max-width: 768px) {
+      .profile-section {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+      }
+    }
+
+    .image-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.6rem;
+      border-radius: 4px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      transition: border-color 0.3s;
+    }
+
+    .image-container:hover {
+      border-color: rgba(201, 168, 76, 0.4);
+    }
+
+    .profile-image {
+      width: 100%;
+      height: auto;
+      border-radius: 2px;
+      display: block;
+      object-fit: cover;
+      aspect-ratio: 165 / 330; /* roughly the ratio of the cropped image 350x650 */
+    }
+
+    .image-caption {
+      margin-top: 0.8rem;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gold-lt);
+      letter-spacing: 0.05em;
+    }
+
+    .image-subcaption {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 0.1rem;
+    }
+
+    .bio-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .6rem;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: .05em;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .bio-text {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+
+    .highlight-text {
+      color: var(--gold-lt);
+      font-weight: 500;
+    }
+
+    /* Core Values Grid */
+    .values-section {
+      border-top: 1px solid var(--border);
+      padding-top: 3.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .values-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: 0.06em;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .values-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+      }
+    }
+
+    .value-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.6rem;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+
+    .value-card:hover {
+      border-color: rgba(201, 168, 76, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .value-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--gold-lt);
+      margin-bottom: 0.8rem;
+    }
+
+    .value-icon {
+      width: 24px;
+      height: 24px;
+      color: var(--gold-lt);
+    }
+
+    .value-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Booking Call to Action */
+    .cta-section {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-bottom: 3rem;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--gold);
+      color: #0d0d0d;
+      border: 1px solid var(--gold);
+      padding: 0.9rem 2.5rem;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(201, 168, 76, 0.2);
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    .cta-button:hover {
+      background: transparent;
+      color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.4);
+    }
+
+    .cta-button:active {
+      transform: translateY(0);
+    }
+
+    .cta-main {
+      font-family: 'Cinzel', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .cta-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+      opacity: 0.9;
+    }
+
+    .back-home-container {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .back-home-link {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-decoration: none;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-home-link:hover {
+      color: var(--gold-lt);
+      transform: translateX(-3px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      margin-top: 5rem;
+      font-size: .8rem;
+      color: var(--muted);
+      letter-spacing: .06em;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a class="nav-brand" href="index.html#top">Vanguard Sharpening</a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="about.html" style="color: var(--gold-lt); font-weight: 600; text-shadow: 0 0 8px rgba(232, 203, 106, 0.3);">About Me</a></li>
+      <li><a href="mail-in.html">Mail-In</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#reviews">Reviews</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    
+    <div class="profile-section">
+      <!-- Left side: image container -->
+      <div class="image-container">
+        <img class="profile-image" src="matthew.jpg" alt="Matthew Johnson" />
+        <div class="image-caption">Matthew Johnson</div>
+        <div class="image-subcaption">Proprietor &amp; Sharpener</div>
+      </div>
+
+      <!-- Right side: Bio details -->
+      <div class="bio-container">
+        <p class="label">Our Story</p>
+        <h1>Meet the Craftsman</h1>
+        
+        <p class="bio-text">
+          My journey with edge tools began far from West Michigan. Having been born in <span class="highlight-text">Zeist, Netherlands</span>, I grew up with a deep appreciation for classic craftsmanship, attention to detail, and quality design. When I relocated, I carried that same European dedication to work standards and precision with me.
+        </p>
+
+        <p class="bio-text">
+          Now at <span class="highlight-text">17 years old</span>, I have directed my focus and dedication toward business and local entrepreneurship. Vanguard Sharpening was founded not just as a business, but as a commitment to serve others by breathing new life into the tools they rely on daily.
+        </p>
+
+        <p class="bio-text">
+          I believe that a sharp edge is more than a convenience—it is a mark of respect for the tool and the craft. Whether you are a culinary enthusiast preparing meals for your family, a gardener tending to local soil, or a woodworker crafting custom designs, my passion is to provide you with reliable, prompt, and premium sharpening service.
+        </p>
+      </div>
+    </div>
+
+    <!-- Core Philosophy Grid -->
+    <div class="values-section">
+      <h2 class="values-title">Core Principles</h2>
+      <div class="values-grid">
+        
+        <div class="value-card">
+          <div class="value-header">
+            <svg class="value-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+            <span>Precision</span>
+          </div>
+          <p class="value-desc">Applying progress-whetstone techniques and individual tooth inspection for flawless, razor-sharp edge restoration.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-header">
+            <svg class="value-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <span>Service First</span>
+          </div>
+          <p class="value-desc">Focusing on convenient local Grand Rapids drop-off and flexible mail-in logistics to serve every client's schedule.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-header">
+            <svg class="value-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <span>Entrepreneurship</span>
+          </div>
+          <p class="value-desc">Building a transparent, flat-rate business model driven by passion, hard work, and continuous improvement.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Booking CTA Block -->
+    <div class="cta-section">
+      <p class="label">Ready to begin?</p>
+      <h2 style="font-family:'Cinzel',serif; color:var(--white); margin-bottom:1rem;">Restore Your Blades Today</h2>
+      <p style="color:var(--muted); font-size:0.95rem; max-width:500px; margin:0 auto 1.2rem;">Book a local drop-off in the Grand Rapids area or prepare your shipment for professional restoration.</p>
+      <a class="cta-button" href="index.html#contact">
+        <span class="cta-main">Book a Sharpening</span>
+        <span class="cta-sub">Get in touch with Matthew</span>
+      </a>
+    </div>
+
+    <!-- Back to Home -->
+    <div class="back-home-container">
+      <a href="index.html" class="back-home-link">
+        &larr; Back to Home
+      </a>
+    </div>
+
+  </div>
+
+  <footer>&copy; 2026 Vanguard Sharpening &middot; Matthew Johnson</footer>
+
+</body>
+
+</html>

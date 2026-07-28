@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detailed Pricing - Vanguard Sharpening</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --border: rgba(201, 168, 76, 0.18);
+      --gold: #c9a84c;
+      --gold-lt: #e8cb6a;
+      --text: #c8c8c8;
+      --muted: #767676;
+      --white: #f0f0f0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(13, 13, 13, 0.96);
+      backdrop-filter: blur(6px);
+      z-index: 50;
+    }
+
+    .nav-brand {
+      font-family: 'Cinzel', serif;
+      font-size: .85rem;
+      letter-spacing: .14em;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .7rem;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: .05em;
+      margin-bottom: 1rem;
+    }
+
+    .lead-text {
+      max-width: 600px;
+      margin: 0 auto 1.5rem;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    /* Filters and Search */
+    .controls-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-bottom: 2.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      border-radius: 4px;
+    }
+
+    .search-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(13, 13, 13, 0.6);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 0.8rem 1rem 0.8rem 2.8rem;
+      font-family: inherit;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(201, 168, 76, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold-lt);
+      width: 18px;
+      height: 18px;
+      opacity: 0.7;
+    }
+
+    .filter-chips {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      background: rgba(13, 13, 13, 0.4);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.5rem 1.1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .filter-chip.active,
+    .filter-chip:hover {
+      border-color: var(--gold);
+      color: var(--gold-lt);
+      background: rgba(201, 168, 76, 0.08);
+      transform: translateY(-1px);
+    }
+
+    /* Grid layout for pricing cards */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+      gap: 1.8rem;
+      margin-bottom: 4rem;
+    }
+
+    @media (max-width: 768px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .price-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.8rem;
+      border-radius: 4px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .price-card:hover {
+      border-color: rgba(201, 168, 76, 0.4);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--gold-lt);
+      letter-spacing: .06em;
+      margin-bottom: 1.2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.8rem;
+    }
+
+    .pricing-icon {
+      width: 28px;
+      height: 28px;
+      color: var(--gold-lt);
+      flex-shrink: 0;
+    }
+
+    .service-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .service-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.06);
+      transition: background-color 0.2s;
+    }
+
+    .service-item:last-child {
+      border-bottom: none;
+    }
+
+    .service-item:hover {
+      background-color: rgba(255, 255, 255, 0.01);
+    }
+
+    .service-name {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    .service-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    .service-price-block {
+      text-align: right;
+    }
+
+    .service-price {
+      color: var(--gold-lt);
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+
+    .service-price-unit {
+      color: var(--muted);
+      font-size: 0.78rem;
+      display: block;
+    }
+
+    /* Calculator Section */
+    .calculator-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2.2rem;
+      border-radius: 4px;
+      margin-top: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    .calc-title-area {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .calc-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .calc-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .calc-row {
+      display: grid;
+      grid-template-columns: 1.5fr 100px;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.06);
+      padding-bottom: 0.8rem;
+    }
+
+    .calc-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .calc-label-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .calc-label {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    .calc-sublabel {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .calc-qty-input {
+      background: rgba(13, 13, 13, 0.8);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .calc-qty-input:focus {
+      border-color: var(--gold);
+    }
+
+    .calc-results {
+      background: rgba(13, 13, 13, 0.5);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .calc-results-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--gold-lt);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.6rem;
+      text-align: center;
+    }
+
+    .calc-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 0.88rem;
+    }
+
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text);
+    }
+
+    .calc-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      margin-top: auto;
+    }
+
+    .calc-total-label {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .calc-total-value {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold-lt);
+      text-shadow: 0 0 10px rgba(232, 203, 106, 0.15);
+    }
+
+    .calc-btn-container {
+      margin-top: 1.2rem;
+      text-align: center;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--gold);
+      color: #0d0d0d;
+      border: 1px solid var(--gold);
+      padding: 0.9rem 2.2rem;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(201, 168, 76, 0.2);
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .cta-button:hover {
+      background: transparent;
+      color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.4);
+    }
+
+    .cta-button:active {
+      transform: translateY(0);
+    }
+
+    .cta-main {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .cta-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+      opacity: 0.9;
+    }
+
+    .shipping-notice {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.8rem 2rem;
+      border-radius: 4px;
+      margin-top: 3rem;
+    }
+
+    .shipping-notice-title {
+      font-family: 'Cinzel', serif;
+      font-size: .95rem;
+      font-weight: 600;
+      color: var(--gold-lt);
+      letter-spacing: .06em;
+      margin-bottom: .8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .shipping-notice p {
+      font-size: .88rem;
+      color: var(--muted);
+      margin-bottom: .6rem;
+      line-height: 1.8;
+    }
+
+    .shipping-notice p strong {
+      color: var(--text);
+    }
+
+    .shipping-notice p:last-child {
+      margin-bottom: 0;
+    }
+
+    .back-home-container {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .back-home-link {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-decoration: none;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-home-link:hover {
+      color: var(--gold-lt);
+      transform: translateX(-3px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      margin-top: 5rem;
+      font-size: .8rem;
+      color: var(--muted);
+      letter-spacing: .06em;
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      color: var(--muted);
+      border-radius: 4px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a class="nav-brand" href="index.html#top">Vanguard Sharpening</a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="about.html" style="color: var(--gold-lt); font-weight: 600; text-shadow: 0 0 8px rgba(232, 203, 106, 0.3);">About Me</a></li>
+      <li><a href="mail-in.html">Mail-In</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#reviews">Reviews</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="header-section">
+      <p class="label">Complete Rate Sheet</p>
+      <h1>Detailed Pricing</h1>
+      <p class="lead-text">Simplistic, transparent, and direct rates for all your sharpening needs. Search below or use the filter chips to locate specific items.</p>
+    </div>
+
+    <!-- Controls: Search and Filters -->
+    <div class="controls-wrapper">
+      <div class="search-container">
+        <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search for blades (e.g. shears, pocket knife, axe...)" oninput="filterServices()" />
+      </div>
+      <div class="filter-chips">
+        <button class="filter-chip active" onclick="setFilter('all', this)">All Items</button>
+        <button class="filter-chip" onclick="setFilter('kitchen', this)">Kitchen</button>
+        <button class="filter-chip" onclick="setFilter('scissors', this)">Scissors &amp; Shears</button>
+        <button class="filter-chip" onclick="setFilter('outdoor', this)">Outdoor &amp; Pocket</button>
+        <button class="filter-chip" onclick="setFilter('garden', this)">Garden Tools</button>
+        <button class="filter-chip" onclick="setFilter('woodworking', this)">Woodworking</button>
+        <button class="filter-chip" onclick="setFilter('specialty', this)">Specialty</button>
+      </div>
+    </div>
+
+    <!-- Pricing Grid -->
+    <div class="pricing-grid" id="pricingGrid">
+
+      <!-- Kitchen Card -->
+      <div class="price-card" data-category="kitchen" data-keywords="kitchen chef paring utility bread cleaver japanese knife blades straight serrated">
+        <div class="card-header">
+          <svg class="pricing-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 56 L20 44 M20 44 L52 12 C44 26 36 38 28 48 Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="14" cy="50" r="1.2" fill="currentColor" />
+          </svg>
+          <span>Kitchen Knives</span>
+        </div>
+        <div class="service-list">
+          <div class="service-item">
+            <div>
+              <div class="service-name">Straight-Bladed Knives</div>
+              <div class="service-desc">Chef, paring, utility, slicing knives.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$5.00 – $8.00</span>
+              <span class="service-price-unit">per knife</span>
+            </div>
+          </div>
+          <div class="service-item">
+            <div>
+              <div class="service-name">Serrated Blades</div>
+              <div class="service-desc">Bread, tomato, and steak knives.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$6.00 – $10.00</span>
+              <span class="service-price-unit">per knife</span>
+            </div>
+          </div>
+          <div class="service-item">
+            <div>
+              <div class="service-name">Meat Cleavers</div>
+              <div class="service-desc">Heavy chopping &amp; bone cleavers.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$8.00</span>
+              <span class="service-price-unit">per cleaver</span>
+            </div>
+          </div>
+          <div class="service-item">
+            <div>
+              <div class="service-name">Traditional Japanese Single-Bevel</div>
+              <div class="service-desc">Yanagiba, Deba, Usuba. Hand whetstone hone.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$15.00</span>
+              <span class="service-price-unit">per knife</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scissors Card -->
+      <div class="price-card" data-category="scissors" data-keywords="scissors shears household fabric sewing pinking barber grooming hair salon kitchen">
+        <div class="card-header">
+          <svg class="pricing-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="46" r="6" stroke="currentColor" stroke-width="2.2" />
+            <circle cx="30" cy="52" r="6" stroke="currentColor" stroke-width="2.2" />
+            <path d="M22 42 L52 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+            <path d="M28 48 L48 10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+            <circle cx="28" cy="38" r="1.5" fill="currentColor" />
+          </svg>
+          <span>Scissors &amp; Shears</span>
+        </div>
+        <div class="service-list">
+          <div class="service-item">
+            <div>
+              <div class="service-name">Household &amp; Kitchen Shears</div>
+              <div class="service-desc">Standard utility and cooking scissors.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$8.00</span>
+              <span class="service-price-unit">per pair</span>
+            </div>
+          </div>
+          <div class="service-item">
+            <div>
+              <div class="service-name">Fabric &amp; Sewing Scissors</div>
+              <div class="service-desc">Tailor shears, fabric shears, sewing scissors.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$10.00</span>
+              <span class="service-price-unit">per pair</span>
+            </div>
+          </div>
+          <div class="service-item">
+            <div>
+              <div class="service-name">Pinking Shears</div>
+              <div class="service-desc">Saw-tooth pattern sewing scissors.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$12.00</span>
+              <span class="service-price-unit">per pair</span>
+            </div>
+          </div>
+          <div class="service-item">
+            <div>
+              <div class="service-name">Barber &amp; Salon Shears</div>
+              <div class="service-desc">Convex/bevel hair grooming shears.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$25.00</span>
+              <span class="service-price-unit">per pair</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outdoor & Pocket Card -->
+      <div class="price-card" data-category="outdoor" data-keywords="outdoor pocket folding hunting survival edc tactical knife blades camp">
+        <div class="card-header">
+          <svg class="pricing-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 29 C4 27 6 27 8 27 L20 27 L20 37 L8 37 C6 37 4 37 4 35 Z" fill="var(--surface)" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            <path d="M4 25 L4 39" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M20 20 C21 28 21 36 20 44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M22 26 L42 26 C46 27 52 30 60 32 C50 36 42 38 22 38 Z" fill="rgba(201, 168, 76, 0.1)" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+          </svg>
+          <span>Outdoor &amp; Pocket</span>
+        </div>
+        <div class="service-list">
+          <div class="service-item">
+            <div>
+              <div class="service-name">Pocket &amp; EDC Knives</div>
+              <div class="service-desc">Folding, tactical, everyday carry pocket knives.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$8.00</span>
+              <span class="service-price-unit">per knife</span>
+            </div>
+          </div>
+          <div class="service-item">
+            <div>
+              <div class="service-name">Hunting &amp; Fixed Blades</div>
+              <div class="service-desc">Survival, skinning, and camping knives.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$10.00</span>
+              <span class="service-price-unit">per knife</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Garden Card -->
+      <div class="price-card" data-category="garden" data-keywords="garden axe hatchet splitting maul loppers pruners trimmer shears machete yard tools">
+        <div class="card-header">
+          <svg class="pricing-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 52 L26 38 M20 56 L30 42" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <circle cx="28" cy="40" r="2" fill="currentColor" />
+            <path d="M28 40 L52 16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+            <path d="M28 40 L44 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+          </svg>
+          <span>Garden &amp; Yard Tools</span>
+        </div>
+        <div class="service-list">
+          <div class="service-item">
+            <div>
+              <div class="service-name">Pruning Shears &amp; Loppers</div>
+              <div class="service-desc">Hand pruners, anvil loppers, bypass loppers.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$8.00</span>
+              <span class="service-price-unit">per tool</span>
+            </div>
+          </div>
+          <div class="service-item">
+            <div>
+              <div class="service-name">Hedge Shears</div>
+              <div class="service-desc">Long-bladed manual trimming shears.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$10.00</span>
+              <span class="service-price-unit">per tool</span>
+            </div>
+          </div>
+          <div class="service-item">
+            <div>
+              <div class="service-name">Axes, Hatchets &amp; Mauls</div>
+              <div class="service-desc">Camp axes, felling axes, splitting mauls.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$12.00</span>
+              <span class="service-price-unit">per tool</span>
+            </div>
+          </div>
+          <div class="service-item">
+            <div>
+              <div class="service-name">Machetes</div>
+              <div class="service-desc">Heavy brush clearing blades.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$15.00</span>
+              <span class="service-price-unit">per blade</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Woodworking Card -->
+      <div class="price-card" data-category="woodworking" data-keywords="woodworking chisels hand plane irons chisels blades bevel">
+        <div class="card-header">
+          <svg class="pricing-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 32 C4 28 6 28 10 28 L24 29.5 L24 34.5 L10 36 C6 36 4 36 4 32 Z" fill="var(--surface)" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            <path d="M28 27 L56 27 L60 27 L60 37 L56 37 L28 37 Z" fill="rgba(201, 168, 76, 0.1)" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            <line x1="54" x2="54" y1="27" y2="37" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+          <span>Woodworking Tools</span>
+        </div>
+        <div class="service-list">
+          <div class="service-item">
+            <div>
+              <div class="service-name">Wood Chisels</div>
+              <div class="service-desc">Standard bench chisels. Flat back and clean bevel.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$7.00</span>
+              <span class="service-price-unit">per chisel</span>
+            </div>
+          </div>
+          <div class="service-item">
+            <div>
+              <div class="service-name">Hand Plane Irons</div>
+              <div class="service-desc">Manual block or bench plane blades.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$9.00</span>
+              <span class="service-price-unit">per blade</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Specialty Card -->
+      <div class="price-card" data-category="specialty" data-keywords="specialty straight razors pizza wheel cutter mandoline round cutter shave razor">
+        <div class="card-header">
+          <svg class="pricing-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="40" r="2" fill="currentColor" />
+            <path d="M24 40 C20 44 14 54 6 56 C8 52 16 42 24 40 Z" fill="var(--surface)" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            <path d="M24 40 L52 20 C54 19 56 20 58 22 L54 30 C53 32 50 33 48 32 L27 43 Z" fill="rgba(201, 168, 76, 0.1)" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+          </svg>
+          <span>Specialty Items</span>
+        </div>
+        <div class="service-list">
+          <div class="service-item">
+            <div>
+              <div class="service-name">Straight Razors</div>
+              <div class="service-desc">Shaving razors, meticulously honed and stropped.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$20.00</span>
+              <span class="service-price-unit">per razor</span>
+            </div>
+          </div>
+          <div class="service-item">
+            <div>
+              <div class="service-name">Pizza Wheels &amp; Mandoline Inserts</div>
+              <div class="service-desc">Rotary blades and slicer inserts.</div>
+            </div>
+            <div class="service-price-block">
+              <span class="service-price">$8.00</span>
+              <span class="service-price-unit">per blade</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Results Message -->
+      <div class="no-results" id="noResults">
+        <p>No services found matching your search. Please try a different term or scroll through the list.</p>
+      </div>
+
+    </div>
+
+    <!-- Calculator Section -->
+    <div class="calculator-section">
+      <div class="calc-title-area">
+        <p class="label">Interactive Estimate</p>
+        <h2>Estimate Your Total</h2>
+        <p style="color:var(--muted); font-size:0.92rem;">Enter your counts below. Volume discounts for kitchen knives are calculated automatically.</p>
+      </div>
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <div class="calc-row">
+            <div class="calc-label-block">
+              <span class="calc-label">Straight Kitchen Knives</span>
+              <span class="calc-sublabel">Vol. discount: $8.00 (1-4) | $6.50 (5-19) | $5.00 (20+)</span>
+            </div>
+            <input type="number" id="qty-straight" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" />
+          </div>
+          <div class="calc-row">
+            <div class="calc-label-block">
+              <span class="calc-label">Serrated Kitchen Knives</span>
+              <span class="calc-sublabel">Vol. discount: $10.00 (1-4) | $8.00 (5-10) | $6.00 (11+)</span>
+            </div>
+            <input type="number" id="qty-serrated" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" />
+          </div>
+          <div class="calc-row">
+            <div class="calc-label-block">
+              <span class="calc-label">Pocket &amp; Hunting Knives</span>
+              <span class="calc-sublabel">Avg rate: $9.00 per knife</span>
+            </div>
+            <input type="number" id="qty-pocket" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" />
+          </div>
+          <div class="calc-row">
+            <div class="calc-label-block">
+              <span class="calc-label">Scissors &amp; Shears</span>
+              <span class="calc-sublabel">Avg rate: $10.00 per pair</span>
+            </div>
+            <input type="number" id="qty-scissors" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" />
+          </div>
+          <div class="calc-row">
+            <div class="calc-label-block">
+              <span class="calc-label">Axes &amp; Hatchets</span>
+              <span class="calc-sublabel">Flat rate: $12.00 per tool</span>
+            </div>
+            <input type="number" id="qty-axes" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" />
+          </div>
+          <div class="calc-row">
+            <div class="calc-label-block">
+              <span class="calc-label">Woodworking &amp; Tool Blades</span>
+              <span class="calc-sublabel">Avg rate: $8.00 per tool</span>
+            </div>
+            <input type="number" id="qty-woodworking" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" />
+          </div>
+        </div>
+
+        <div class="calc-results">
+          <div>
+            <div class="calc-results-title">Estimate Summary</div>
+            <div class="calc-breakdown" id="calcBreakdown">
+              <div style="color: var(--muted); text-align: center; margin-top: 2rem;">Enter blade quantities to see breakdown.</div>
+            </div>
+          </div>
+          <div>
+            <div class="calc-total-row">
+              <span class="calc-total-label">Estimated Total</span>
+              <span class="calc-total-value" id="calcTotal">$0.00</span>
+            </div>
+            <div class="calc-btn-container">
+              <a href="#" id="bookEmailBtn" class="cta-button">
+                <span class="cta-main">Book Sharpening</span>
+                <span class="cta-sub">Send estimate to Matthew</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shipping Notice -->
+    <div class="shipping-notice">
+      <div class="shipping-notice-title">&#9432;&nbsp; Shipping &amp; Drop-off Information</div>
+      <p>Rates above cover sharpening services only. If shipping blades to us, shipping is your responsibility both ways. We highly recommend packing blades securely with heavy cardboard wrapping or padding.</p>
+      <p>If you are local to the <strong>Grand Rapids, Michigan</strong> area, contact Matthew to schedule a convenient local drop-off and pickup to save on postage costs.</p>
+      <div style="margin-top: 1.2rem; text-align: center;">
+        <a class="cta-button" href="mail-in.html" style="margin-top: 0; padding: 0.6rem 1.8rem; display: inline-flex;">
+          <span class="cta-main" style="font-size: 0.95rem;">Mail-In Guide</span>
+          <span class="cta-sub" style="font-size: 0.65rem;">How to ship your blades</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Back Home Link -->
+    <div class="back-home-container">
+      <a href="index.html" class="back-home-link">
+        &larr; Back to Home
+      </a>
+    </div>
+
+  </div>
+
+  <footer>&copy; 2026 Vanguard Sharpening &middot; Matthew Johnson</footer>
+
+  <script>
+    var currentFilter = 'all';
+
+    function setFilter(category, buttonEl) {
+      currentFilter = category;
+      
+      // Update active state of filter buttons
+      var buttons = document.querySelectorAll('.filter-chip');
+      buttons.forEach(function(btn) {
+        btn.classList.remove('active');
+      });
+      buttonEl.classList.add('active');
+
+      filterServices();
+    }
+
+    function filterServices() {
+      var searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+      var cards = document.querySelectorAll('.price-card');
+      var visibleCardsCount = 0;
+
+      cards.forEach(function(card) {
+        var cardCategory = card.getAttribute('data-category');
+        var keywords = card.getAttribute('data-keywords').toLowerCase();
+        
+        // Check category filter
+        var matchesCategory = (currentFilter === 'all' || cardCategory === currentFilter);
+        
+        // Check search query
+        var matchesSearch = true;
+        if (searchQuery !== '') {
+          matchesSearch = keywords.indexOf(searchQuery) !== -1;
+        }
+
+        if (matchesCategory && matchesSearch) {
+          card.style.display = 'flex';
+          visibleCardsCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Show/Hide no results notice
+      var noResults = document.getElementById('noResults');
+      if (visibleCardsCount === 0) {
+        noResults.style.display = 'block';
+      } else {
+        noResults.style.display = 'none';
+      }
+    }
+
+    function calculateTotal() {
+      // Inputs
+      var straightQty = parseInt(document.getElementById('qty-straight').value) || 0;
+      var serratedQty = parseInt(document.getElementById('qty-serrated').value) || 0;
+      var pocketQty = parseInt(document.getElementById('qty-pocket').value) || 0;
+      var scissorsQty = parseInt(document.getElementById('qty-scissors').value) || 0;
+      var axesQty = parseInt(document.getElementById('qty-axes').value) || 0;
+      var woodworkingQty = parseInt(document.getElementById('qty-woodworking').value) || 0;
+
+      var straightTotal = 0;
+      var straightRate = 8.00;
+      if (straightQty >= 20) {
+        straightRate = 5.00;
+      } else if (straightQty >= 5) {
+        straightRate = 6.50;
+      }
+      straightTotal = straightQty * straightRate;
+
+      var serratedTotal = 0;
+      var serratedRate = 10.00;
+      if (serratedQty >= 11) {
+        serratedRate = 6.00;
+      } else if (serratedQty >= 5) {
+        serratedRate = 8.00;
+      }
+      serratedTotal = serratedQty * serratedRate;
+
+      var pocketTotal = pocketQty * 9.00; // average of pocket ($8) and hunting ($10)
+      var scissorsTotal = scissorsQty * 10.00;
+      var axesTotal = axesQty * 12.00;
+      var woodworkingTotal = woodworkingQty * 8.00;
+
+      var total = straightTotal + serratedTotal + pocketTotal + scissorsTotal + axesTotal + woodworkingTotal;
+
+      // Update total element
+      document.getElementById('calcTotal').textContent = '$' + total.toFixed(2);
+
+      // Generate Breakdown
+      var breakdownEl = document.getElementById('calcBreakdown');
+      breakdownEl.innerHTML = '';
+
+      var items = [];
+      if (straightQty > 0) {
+        items.push({ name: 'Straight Kitchen Knives', qty: straightQty, rate: straightRate, total: straightTotal });
+      }
+      if (serratedQty > 0) {
+        items.push({ name: 'Serrated Kitchen Knives', qty: serratedQty, rate: serratedRate, total: serratedTotal });
+      }
+      if (pocketQty > 0) {
+        items.push({ name: 'Pocket / Hunting Knives', qty: pocketQty, rate: 9.00, total: pocketTotal });
+      }
+      if (scissorsQty > 0) {
+        items.push({ name: 'Scissors & Shears', qty: scissorsQty, rate: 10.00, total: scissorsTotal });
+      }
+      if (axesQty > 0) {
+        items.push({ name: 'Axes & Hatchets', qty: axesQty, rate: 12.00, total: axesTotal });
+      }
+      if (woodworkingQty > 0) {
+        items.push({ name: 'Woodworking Chisels & Tools', qty: woodworkingQty, rate: 8.00, total: woodworkingTotal });
+      }
+
+      if (items.length === 0) {
+        breakdownEl.innerHTML = '<div style="color: var(--muted); text-align: center; margin-top: 2rem;">Enter blade quantities to see breakdown.</div>';
+        document.getElementById('bookEmailBtn').setAttribute('href', '#');
+        return;
+      }
+
+      items.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'breakdown-item';
+        row.innerHTML = '<span>' + item.qty + 'x ' + item.name + '</span><span>$' + item.total.toFixed(2) + '</span>';
+        breakdownEl.appendChild(row);
+      });
+
+      // Update mailto link dynamically
+      var emailSubject = encodeURIComponent('Sharpening Estimate - Vanguard Sharpening');
+      var emailBody = 'Hi Matthew,\n\nI would like to book a sharpening service. Here is my estimated list of blades:\n';
+      items.forEach(function(item) {
+        emailBody += '- ' + item.qty + 'x ' + item.name + ' (Est. $' + item.total.toFixed(2) + ')\n';
+      });
+      emailBody += '\nEstimated Total: $' + total.toFixed(2) + '\n\nPlease let me know when I can drop them off / ship them.\n\nBest regards,';
+      
+      document.getElementById('bookEmailBtn').setAttribute('href', 'mailto:vanguardsharpening88@gmail.com?subject=' + emailSubject + '&body=' + encodeURIComponent(emailBody));
+    }
+  </script>
+</body>
+
+</html>
