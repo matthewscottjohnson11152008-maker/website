@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Sharpening - Vanguard Sharpening</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --border: rgba(201, 168, 76, 0.18);
+      --gold: #c9a84c;
+      --gold-lt: #e8cb6a;
+      --text: #c8c8c8;
+      --muted: #767676;
+      --white: #f0f0f0;
+      --glow: rgba(201, 168, 76, 0.15);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13, 13, 13, 0.96);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-brand {
+      font-family: 'Cinzel', serif;
+      font-size: .85rem;
+      letter-spacing: .14em;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    /* Container for layout */
+    .booking-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .booking-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 100%;
+      max-width: 800px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle background glow effect */
+    .booking-card::before {
+      content: '';
+      position: absolute;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .8rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: .05em;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .lead-text {
+      max-width: 550px;
+      margin: 0 auto 3rem;
+      color: var(--text);
+      font-size: 0.98rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Two Options Layout */
+    .options-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 650px) {
+      .options-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+
+    .option-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(13, 13, 13, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2.5rem 1.8rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .option-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      transition: border-color 0.4s;
+      pointer-events: none;
+    }
+
+    .option-card:hover {
+      transform: translateY(-5px);
+      background: rgba(201, 168, 76, 0.03);
+      box-shadow: 0 12px 30px rgba(201, 168, 76, 0.08);
+      border-color: rgba(201, 168, 76, 0.4);
+    }
+
+    .option-card:hover::after {
+      border-color: var(--gold-lt);
+    }
+
+    .option-icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(201, 168, 76, 0.06);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      margin-bottom: 1.5rem;
+      transition: all 0.4s;
+    }
+
+    .option-card:hover .option-icon-container {
+      background: rgba(201, 168, 76, 0.12);
+      border-color: var(--gold-lt);
+      box-shadow: 0 0 15px rgba(232, 203, 106, 0.2);
+    }
+
+    .option-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--gold-lt);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Specific Icon Animations */
+    .option-card:hover .pin-icon {
+      transform: translateY(-4px);
+    }
+
+    .option-card:hover .package-icon {
+      transform: scale(1.1) rotate(3deg);
+    }
+
+    .option-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.03em;
+    }
+
+    .option-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    /* Back Link styling */
+    .back-container {
+      position: relative;
+      z-index: 1;
+      margin-top: 1rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--gold-lt);
+      transform: translateX(-3px);
+    }
+
+    /* Progress Indicator */
+    .progress-container {
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      position: relative;
+      padding: 0 1rem;
+    }
+
+    .progress-bar-line {
+      position: absolute;
+      top: 20px;
+      left: 3rem;
+      right: 3rem;
+      height: 2px;
+      background: rgba(201, 168, 76, 0.15);
+      z-index: 1;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gold);
+      transition: width 0.4s ease;
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid rgba(201, 168, 76, 0.3);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.4s ease;
+      position: relative;
+      z-index: 3;
+    }
+
+    .step-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      transition: all 0.4s ease;
+    }
+
+    /* Active Step Styling */
+    .progress-step.active .step-circle {
+      border-color: var(--gold-lt);
+      background: var(--gold);
+      color: #0d0d0d;
+      box-shadow: 0 0 15px rgba(232, 203, 106, 0.4);
+    }
+
+    .progress-step.active .step-label {
+      color: var(--white);
+    }
+
+    /* Completed Step Styling */
+    .progress-step.completed .step-circle {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.15);
+      color: var(--gold-lt);
+    }
+
+    .progress-step.completed .step-label {
+      color: var(--gold-lt);
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a class="nav-brand" href="index.html#top">Vanguard Sharpening</a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="about.html" style="color: var(--gold-lt); font-weight: 600; text-shadow: 0 0 8px rgba(232, 203, 106, 0.3);">About Me</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#reviews">Reviews</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="booking-wrapper">
+    <div class="booking-card">
+      <!-- Progress Indicator -->
+      <div class="progress-container">
+        <div class="progress-bar-line">
+          <div class="progress-bar-fill" style="width: 20%;"></div>
+        </div>
+        <div class="progress-steps">
+          <div class="progress-step completed" id="step-estimate">
+            <div class="step-circle">1</div>
+            <div class="step-label">Estimate</div>
+          </div>
+          <div class="progress-step active" id="step-routing">
+            <div class="step-circle">2</div>
+            <div class="step-label">Routing</div>
+          </div>
+          <div class="progress-step" id="step-address">
+            <div class="step-circle">3</div>
+            <div class="step-label">Address</div>
+          </div>
+          <div class="progress-step" id="step-shipping">
+            <div class="step-circle">4</div>
+            <div class="step-label">Shipping</div>
+          </div>
+          <div class="progress-step" id="step-billing">
+            <div class="step-circle">5</div>
+            <div class="step-label">Billing</div>
+          </div>
+          <div class="progress-step" id="step-instructions">
+            <div class="step-circle">6</div>
+            <div class="step-label">Instructions</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="label">Select Booking Method</p>
+      <h1>Local or Mail-in?</h1>
+      <p class="lead-text">Choose how you'd like to get your blades to our workshop. Whether you are local to West Michigan or shipping from across the nation, we've got you covered.</p>
+
+      <div class="options-container">
+        <!-- Local Option Card -->
+        <a href="#" id="localBookingLink" class="option-card">
+          <div class="option-icon-container">
+            <!-- Google Maps style pin logo -->
+            <svg class="option-icon pin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </div>
+          <h2 class="option-title">Local Drop-off</h2>
+          <p class="option-desc">Drop your blades off in Grand Rapids, MI. Convenient scheduling, personal hand-off, and local turnaround.</p>
+        </a>
+
+        <!-- Mail-in Option Card -->
+        <a href="shipping-info.html" id="mailBookingLink" class="option-card">
+          <div class="option-icon-container">
+            <!-- Package/Box Logo -->
+            <svg class="option-icon package-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+              <polygon points="12 22.08 12 12 3 6.92 3 17.08 12 22.08"></polygon>
+              <polygon points="12 12 21 6.92 21 17.08 12 22.08"></polygon>
+              <polygon points="12 2 3 6.92 12 12 21 6.92 12 2"></polygon>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <h2 class="option-title">Mail-In Service</h2>
+          <p class="option-desc">Ship your knives from anywhere in the USA. We sharpen and return-mail them back to your door safely.</p>
+        </a>
+      </div>
+
+      <div class="back-container">
+        <a href="pricing.html" class="back-link">
+          &larr; Back to Pricing Calculator
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Vanguard Sharpening &middot; Matthew Johnson</footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Retrieve estimate details from localStorage
+      var estimate = localStorage.getItem('sharpeningEstimate');
+      var recipient = 'vanguardsharpening88@gmail.com';
+
+      // 1. Build Local Mailto link
+      var localSubject = encodeURIComponent('Local Sharpening Booking - Vanguard Sharpening');
+      var localBody = '';
+      if (estimate) {
+        localBody += 'Hi Matthew,\n\nI would like to book a local sharpening service in Grand Rapids.\n\nHere are my estimated order details:\n';
+        // Clean out the original header if it exists
+        var cleanEstimate = estimate.replace('Hi Matthew,\n\nI would like to book a sharpening service. ', '');
+        localBody += cleanEstimate;
+        localBody += '\n\nPlease let me know when and where I can drop off my blades.\n\nBest regards,';
+      } else {
+        localBody += 'Hi Matthew,\n\nI would like to book a local sharpening service in Grand Rapids. Please let me know how to proceed.\n\nBest regards,';
+      }
+      var localMailto = 'mailto:' + recipient + '?subject=' + localSubject + '&body=' + encodeURIComponent(localBody);
+      document.getElementById('localBookingLink').setAttribute('href', localMailto);
+    });
+  </script>
+
+</body>
+
+</html>

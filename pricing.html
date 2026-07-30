@@ -569,6 +569,96 @@
       border-radius: 4px;
       display: none;
     }
+
+    /* Progress Indicator */
+    .progress-container {
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      position: relative;
+      padding: 0 1rem;
+    }
+
+    .progress-bar-line {
+      position: absolute;
+      top: 20px;
+      left: 3rem;
+      right: 3rem;
+      height: 2px;
+      background: rgba(201, 168, 76, 0.15);
+      z-index: 1;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gold);
+      transition: width 0.4s ease;
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid rgba(201, 168, 76, 0.3);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.4s ease;
+      position: relative;
+      z-index: 3;
+    }
+
+    .step-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      transition: all 0.4s ease;
+    }
+
+    /* Active Step Styling */
+    .progress-step.active .step-circle {
+      border-color: var(--gold-lt);
+      background: var(--gold);
+      color: #0d0d0d;
+      box-shadow: 0 0 15px rgba(232, 203, 106, 0.4);
+    }
+
+    .progress-step.active .step-label {
+      color: var(--white);
+    }
+
+    /* Completed Step Styling */
+    .progress-step.completed .step-circle {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.15);
+      color: var(--gold-lt);
+    }
+
+    .progress-step.completed .step-label {
+      color: var(--gold-lt);
+    }
   </style>
 </head>
 
@@ -579,7 +669,6 @@
     <ul class="nav-links">
       <li><a href="index.html#services">Services</a></li>
       <li><a href="about.html" style="color: var(--gold-lt); font-weight: 600; text-shadow: 0 0 8px rgba(232, 203, 106, 0.3);">About Me</a></li>
-      <li><a href="mail-in.html">Mail-In</a></li>
       <li><a href="index.html#pricing">Pricing</a></li>
       <li><a href="index.html#reviews">Reviews</a></li>
       <li><a href="index.html#contact">Contact</a></li>
@@ -587,6 +676,39 @@
   </nav>
 
   <div class="container">
+    <!-- Progress Indicator -->
+    <div class="progress-container">
+      <div class="progress-bar-line">
+        <div class="progress-bar-fill" style="width: 0%;"></div>
+      </div>
+      <div class="progress-steps">
+        <div class="progress-step active" id="step-estimate">
+          <div class="step-circle">1</div>
+          <div class="step-label">Estimate</div>
+        </div>
+        <div class="progress-step" id="step-routing">
+          <div class="step-circle">2</div>
+          <div class="step-label">Routing</div>
+        </div>
+        <div class="progress-step" id="step-address">
+          <div class="step-circle">3</div>
+          <div class="step-label">Address</div>
+        </div>
+        <div class="progress-step" id="step-shipping">
+          <div class="step-circle">4</div>
+          <div class="step-label">Shipping</div>
+        </div>
+        <div class="progress-step" id="step-billing">
+          <div class="step-circle">5</div>
+          <div class="step-label">Billing</div>
+        </div>
+        <div class="progress-step" id="step-instructions">
+          <div class="step-circle">6</div>
+          <div class="step-label">Instructions</div>
+        </div>
+      </div>
+    </div>
+
     <div class="header-section">
       <p class="label">Complete Rate Sheet</p>
       <h1>Detailed Pricing</h1>
@@ -958,7 +1080,6 @@
             <div class="calc-btn-container">
               <a href="#" id="bookEmailBtn" class="cta-button">
                 <span class="cta-main">Book Sharpening</span>
-                <span class="cta-sub">Send estimate to Matthew</span>
               </a>
             </div>
           </div>
@@ -971,12 +1092,6 @@
       <div class="shipping-notice-title">&#9432;&nbsp; Shipping &amp; Drop-off Information</div>
       <p>Rates above cover sharpening services only. If shipping blades to us, shipping is your responsibility both ways. We highly recommend packing blades securely with heavy cardboard wrapping or padding.</p>
       <p>If you are local to the <strong>Grand Rapids, Michigan</strong> area, contact Matthew to schedule a convenient local drop-off and pickup to save on postage costs.</p>
-      <div style="margin-top: 1.2rem; text-align: center;">
-        <a class="cta-button" href="mail-in.html" style="margin-top: 0; padding: 0.6rem 1.8rem; display: inline-flex;">
-          <span class="cta-main" style="font-size: 0.95rem;">Mail-In Guide</span>
-          <span class="cta-sub" style="font-size: 0.65rem;">How to ship your blades</span>
-        </a>
-      </div>
     </div>
 
     <!-- Back Home Link -->
@@ -1105,6 +1220,7 @@
       if (items.length === 0) {
         breakdownEl.innerHTML = '<div style="color: var(--muted); text-align: center; margin-top: 2rem;">Enter blade quantities to see breakdown.</div>';
         document.getElementById('bookEmailBtn').setAttribute('href', '#');
+        localStorage.removeItem('sharpeningEstimate');
         return;
       }
 
@@ -1115,16 +1231,23 @@
         breakdownEl.appendChild(row);
       });
 
-      // Update mailto link dynamically
-      var emailSubject = encodeURIComponent('Sharpening Estimate - Vanguard Sharpening');
+      // Prepare email body details
       var emailBody = 'Hi Matthew,\n\nI would like to book a sharpening service. Here is my estimated list of blades:\n';
       items.forEach(function(item) {
         emailBody += '- ' + item.qty + 'x ' + item.name + ' (Est. $' + item.total.toFixed(2) + ')\n';
       });
-      emailBody += '\nEstimated Total: $' + total.toFixed(2) + '\n\nPlease let me know when I can drop them off / ship them.\n\nBest regards,';
+      emailBody += '\nEstimated Total: $' + total.toFixed(2) + '\n\nPlease let me know how to proceed.\n\nBest regards,';
       
-      document.getElementById('bookEmailBtn').setAttribute('href', 'mailto:vanguardsharpening88@gmail.com?subject=' + emailSubject + '&body=' + encodeURIComponent(emailBody));
+      localStorage.setItem('sharpeningEstimate', emailBody);
+      document.getElementById('bookEmailBtn').setAttribute('href', 'book.html');
     }
+
+    document.getElementById('bookEmailBtn').addEventListener('click', function(e) {
+      if (this.getAttribute('href') === '#') {
+        e.preventDefault();
+        alert('Please enter blade quantities in the calculator first to see an estimate and proceed.');
+      }
+    });
   </script>
 </body>
 

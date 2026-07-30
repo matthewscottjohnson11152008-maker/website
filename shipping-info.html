@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shipping Information - Vanguard Sharpening</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --border: rgba(201, 168, 76, 0.18);
+      --gold: #c9a84c;
+      --gold-lt: #e8cb6a;
+      --text: #c8c8c8;
+      --muted: #767676;
+      --white: #f0f0f0;
+      --glow: rgba(201, 168, 76, 0.15);
+      --error: #cf6679;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13, 13, 13, 0.96);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-brand {
+      font-family: 'Cinzel', serif;
+      font-size: .85rem;
+      letter-spacing: .14em;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    /* Container */
+    .form-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 100%;
+      max-width: 600px;
+      padding: 3rem 2.5rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .8rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: .05em;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    /* Progress Indicator */
+    .progress-container {
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      position: relative;
+      padding: 0 1rem;
+    }
+
+    .progress-bar-line {
+      position: absolute;
+      top: 20px;
+      left: 3rem;
+      right: 3rem;
+      height: 2px;
+      background: rgba(201, 168, 76, 0.15);
+      z-index: 1;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gold);
+      transition: width 0.4s ease;
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid rgba(201, 168, 76, 0.3);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.4s ease;
+      position: relative;
+      z-index: 3;
+    }
+
+    .step-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      transition: all 0.4s ease;
+    }
+
+    /* Active Step Styling */
+    .progress-step.active .step-circle {
+      border-color: var(--gold-lt);
+      background: var(--gold);
+      color: #0d0d0d;
+      box-shadow: 0 0 15px rgba(232, 203, 106, 0.4);
+    }
+
+    .progress-step.active .step-label {
+      color: var(--white);
+    }
+
+    /* Completed Step Styling */
+    .progress-step.completed .step-circle {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.15);
+      color: var(--gold-lt);
+    }
+
+    .progress-step.completed .step-label {
+      color: var(--gold-lt);
+    }
+
+    /* Form Fields styling */
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 500px) {
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+
+    label.field-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+      margin-bottom: 0.5rem;
+    }
+
+    label.field-label span.req {
+      color: var(--gold);
+      margin-left: 2px;
+    }
+
+    label.field-label span.opt-or {
+      color: var(--muted);
+      text-transform: lowercase;
+      font-weight: normal;
+      font-size: 0.7rem;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(13, 13, 13, 0.6);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 0.8rem 1rem;
+      font-family: inherit;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(201, 168, 76, 0.1);
+    }
+
+    .form-input.input-error {
+      border-color: var(--error);
+      box-shadow: 0 0 10px rgba(207, 102, 121, 0.15);
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 0.75rem;
+      margin-top: 0.4rem;
+      display: none;
+    }
+
+    .error-banner {
+      background: rgba(207, 102, 121, 0.08);
+      border: 1px solid var(--error);
+      border-radius: 4px;
+      padding: 1rem;
+      margin-bottom: 1.8rem;
+      color: #ff8a9a;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    /* CTA Buttons */
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gold);
+      color: #0d0d0d;
+      border: 1px solid var(--gold);
+      padding: 0.9rem 2.2rem;
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(201, 168, 76, 0.2);
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+
+    .cta-button:hover {
+      background: transparent;
+      color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.4);
+    }
+
+    .cta-button:active {
+      transform: translateY(0);
+    }
+
+    /* Back Link */
+    .back-container {
+      margin-top: 1.8rem;
+      text-align: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--gold-lt);
+      transform: translateX(-3px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: .75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      margin-top: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a class="nav-brand" href="index.html#top">Vanguard Sharpening</a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="about.html" style="color: var(--gold-lt); font-weight: 600; text-shadow: 0 0 8px rgba(232, 203, 106, 0.3);">About Me</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#reviews">Reviews</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="form-wrapper">
+    <div class="form-card">
+      
+      <!-- Progress Indicator -->
+      <div class="progress-container">
+        <div class="progress-bar-line">
+          <div class="progress-bar-fill" style="width: 40%;"></div>
+        </div>
+        <div class="progress-steps">
+          <div class="progress-step completed" id="step-estimate">
+            <div class="step-circle">1</div>
+            <div class="step-label">Estimate</div>
+          </div>
+          <div class="progress-step completed" id="step-routing">
+            <div class="step-circle">2</div>
+            <div class="step-label">Routing</div>
+          </div>
+          <div class="progress-step active" id="step-address">
+            <div class="step-circle">3</div>
+            <div class="step-label">Address</div>
+          </div>
+          <div class="progress-step" id="step-shipping">
+            <div class="step-circle">4</div>
+            <div class="step-label">Shipping</div>
+          </div>
+          <div class="progress-step" id="step-billing">
+            <div class="step-circle">5</div>
+            <div class="step-label">Billing</div>
+          </div>
+          <div class="progress-step" id="step-instructions">
+            <div class="step-circle">6</div>
+            <div class="step-label">Instructions</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="label">Mail-In Details</p>
+      <h1>Shipping Address</h1>
+
+      <!-- General Error Banner -->
+      <div id="errorBanner" class="error-banner"></div>
+
+      <form id="shippingForm" novalidate>
+        <!-- Name -->
+        <div class="form-group">
+          <label class="field-label" for="fullName">Full Name<span class="req">*</span></label>
+          <input type="text" id="fullName" class="form-input" placeholder="e.g. John Doe" required />
+          <div class="error-msg" id="nameError">Full name is required.</div>
+        </div>
+
+        <!-- Contact details row (Email & Phone) -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="field-label" for="email">Email <span class="opt-or">(one contact method required)*</span></label>
+            <input type="email" id="email" class="form-input" placeholder="e.g. john@example.com" />
+            <div class="error-msg" id="emailError">Please enter a valid email address.</div>
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="phone">Phone Number <span class="opt-or">(one contact method required)*</span></label>
+            <input type="tel" id="phone" class="form-input" placeholder="e.g. 616-555-0199" />
+            <div class="error-msg" id="phoneError">Please enter a phone number.</div>
+          </div>
+        </div>
+
+        <!-- Street Address -->
+        <div class="form-group">
+          <label class="field-label" for="address">Street Address<span class="req">*</span></label>
+          <input type="text" id="address" class="form-input" placeholder="e.g. 123 Edge Wood Ave NE" required />
+          <div class="error-msg" id="addressError">Street address is required.</div>
+        </div>
+
+        <!-- Zip Code -->
+        <div class="form-group">
+          <label class="field-label" for="zipCode">Zip Code<span class="req">*</span></label>
+          <input type="text" id="zipCode" class="form-input" placeholder="e.g. 49503" required />
+          <div class="error-msg" id="zipError">Zip code is required.</div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="cta-button">Proceed to Billing</button>
+      </form>
+
+      <div class="back-container">
+        <a href="book.html" class="back-link">
+          &larr; Back to Routing Option
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Vanguard Sharpening &middot; Matthew Johnson</footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var form = document.getElementById('shippingForm');
+      var nameInput = document.getElementById('fullName');
+      var emailInput = document.getElementById('email');
+      var phoneInput = document.getElementById('phone');
+      var addressInput = document.getElementById('address');
+      var zipInput = document.getElementById('zipCode');
+
+      var nameError = document.getElementById('nameError');
+      var emailError = document.getElementById('emailError');
+      var phoneError = document.getElementById('phoneError');
+      var addressError = document.getElementById('addressError');
+      var zipError = document.getElementById('zipError');
+      var errorBanner = document.getElementById('errorBanner');
+
+      // Populate form if details already exist in localStorage
+      var savedDetails = localStorage.getItem('shippingDetails');
+      if (savedDetails) {
+        try {
+          var details = JSON.parse(savedDetails);
+          nameInput.value = details.name || '';
+          emailInput.value = details.email || '';
+          phoneInput.value = details.phone || '';
+          addressInput.value = details.address || '';
+          zipInput.value = details.zip || '';
+        } catch (e) {
+          console.error('Error parsing shipping details', e);
+        }
+      }
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Clear previous error states
+        var inputs = [nameInput, emailInput, phoneInput, addressInput, zipInput];
+        inputs.forEach(function(input) {
+          input.classList.remove('input-error');
+        });
+        nameError.style.display = 'none';
+        emailError.style.display = 'none';
+        phoneError.style.display = 'none';
+        addressError.style.display = 'none';
+        zipError.style.display = 'none';
+        errorBanner.style.display = 'none';
+        errorBanner.textContent = '';
+
+        var isValid = true;
+        var errors = [];
+
+        // Validate Name
+        if (!nameInput.value.trim()) {
+          nameInput.classList.add('input-error');
+          nameError.style.display = 'block';
+          isValid = false;
+        }
+
+        // Validate Email/Phone condition (At least one)
+        var emailVal = emailInput.value.trim();
+        var phoneVal = phoneInput.value.trim();
+        if (!emailVal && !phoneVal) {
+          emailInput.classList.add('input-error');
+          phoneInput.classList.add('input-error');
+          errors.push('At least one contact method (Email or Phone Number) must be provided.');
+          isValid = false;
+        } else {
+          // Simple validation checks if filled
+          if (emailVal) {
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailVal)) {
+              emailInput.classList.add('input-error');
+              emailError.style.display = 'block';
+              isValid = false;
+            }
+          }
+        }
+
+        // Validate Address
+        if (!addressInput.value.trim()) {
+          addressInput.classList.add('input-error');
+          addressError.style.display = 'block';
+          isValid = false;
+        }
+
+        // Validate Zip Code
+        if (!zipInput.value.trim()) {
+          zipInput.classList.add('input-error');
+          zipError.style.display = 'block';
+          isValid = false;
+        }
+
+        if (!isValid) {
+          if (errors.length > 0) {
+            errorBanner.textContent = errors.join(' ');
+            errorBanner.style.display = 'block';
+          }
+          return;
+        }
+
+        // Save valid details to localStorage
+        var shippingDetails = {
+          name: nameInput.value.trim(),
+          email: emailVal,
+          phone: phoneVal,
+          address: addressInput.value.trim(),
+          zip: zipInput.value.trim()
+        };
+
+        localStorage.setItem('shippingDetails', JSON.stringify(shippingDetails));
+
+        // Redirect to Shipping Method Page
+        window.location.href = 'shipping-method.html';
+      });
+    });
+  </script>
+
+</body>
+
+</html>

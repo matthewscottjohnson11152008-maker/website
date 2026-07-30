@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shipping Instructions - Vanguard Sharpening</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --border: rgba(201, 168, 76, 0.18);
+      --gold: #c9a84c;
+      --gold-lt: #e8cb6a;
+      --text: #c8c8c8;
+      --muted: #767676;
+      --white: #f0f0f0;
+      --glow: rgba(201, 168, 76, 0.15);
+      --success: #03dac6;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13, 13, 13, 0.96);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-brand {
+      font-family: 'Cinzel', serif;
+      font-size: .85rem;
+      letter-spacing: .14em;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    /* Container */
+    .instructions-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .instructions-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 100%;
+      max-width: 900px;
+      padding: 3.5rem 3rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    /* Progress Indicator */
+    .progress-container {
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+      position: relative;
+      padding: 0 1rem;
+    }
+
+    .progress-bar-line {
+      position: absolute;
+      top: 20px;
+      left: 3rem;
+      right: 3rem;
+      height: 2px;
+      background: rgba(201, 168, 76, 0.15);
+      z-index: 1;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gold);
+      transition: width 0.4s ease;
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid rgba(201, 168, 76, 0.3);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.4s ease;
+      position: relative;
+      z-index: 3;
+    }
+
+    .step-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      transition: all 0.4s ease;
+    }
+
+    .progress-step.active .step-circle {
+      border-color: var(--gold-lt);
+      background: var(--gold);
+      color: #0d0d0d;
+      box-shadow: 0 0 15px rgba(232, 203, 106, 0.4);
+    }
+
+    .progress-step.active .step-label {
+      color: var(--white);
+    }
+
+    .progress-step.completed .step-circle {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.15);
+      color: var(--gold-lt);
+    }
+
+    .progress-step.completed .step-label {
+      color: var(--gold-lt);
+    }
+
+    /* Thank you banner */
+    .thank-you-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .thank-you-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 600;
+      color: var(--gold-lt);
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 15px rgba(232, 203, 106, 0.15);
+    }
+
+    .thank-you-sub {
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* Visual Instructions Cards */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+    }
+
+    .step-card {
+      background: rgba(13, 13, 13, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2.2rem 1.6rem;
+      text-align: center;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(201, 168, 76, 0.06);
+    }
+
+    .step-number-tag {
+      position: absolute;
+      top: -15px;
+      right: 10px;
+      font-family: 'Cinzel', serif;
+      font-size: 4rem;
+      font-weight: 700;
+      color: rgba(201, 168, 76, 0.04);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .step-icon-wrapper {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: rgba(201, 168, 76, 0.04);
+      border: 1px solid rgba(201, 168, 76, 0.12);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: var(--gold-lt);
+      transition: all 0.3s;
+    }
+
+    .step-card:hover .step-icon-wrapper {
+      background: rgba(201, 168, 76, 0.1);
+      border-color: var(--gold-lt);
+      box-shadow: 0 0 15px rgba(232, 203, 106, 0.2);
+    }
+
+    .step-card-icon {
+      width: 34px;
+      height: 34px;
+    }
+
+    .step-card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.04em;
+    }
+
+    .step-card-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .safety-alert {
+      color: var(--gold-lt);
+      font-weight: 600;
+      margin-top: 0.4rem;
+      display: block;
+    }
+
+    /* Actions */
+    .actions-section {
+      text-align: center;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gold);
+      color: #0d0d0d;
+      border: 1px solid var(--gold);
+      padding: 0.9rem 2.5rem;
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(201, 168, 76, 0.2);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .cta-button:hover {
+      background: transparent;
+      color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.4);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: .75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      margin-top: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a class="nav-brand" href="index.html#top">Vanguard Sharpening</a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="about.html" style="color: var(--gold-lt); font-weight: 600; text-shadow: 0 0 8px rgba(232, 203, 106, 0.3);">About Me</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#reviews">Reviews</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="instructions-wrapper">
+    <div class="instructions-card">
+      
+      <!-- Progress Indicator -->
+      <div class="progress-container">
+        <div class="progress-bar-line">
+          <div class="progress-bar-fill" style="width: 100%;"></div>
+        </div>
+        <div class="progress-steps">
+          <div class="progress-step completed" id="step-estimate">
+            <div class="step-circle">1</div>
+            <div class="step-label">Estimate</div>
+          </div>
+          <div class="progress-step completed" id="step-routing">
+            <div class="step-circle">2</div>
+            <div class="step-label">Routing</div>
+          </div>
+          <div class="progress-step completed" id="step-address">
+            <div class="step-circle">3</div>
+            <div class="step-label">Address</div>
+          </div>
+          <div class="progress-step completed" id="step-shipping">
+            <div class="step-circle">4</div>
+            <div class="step-label">Shipping</div>
+          </div>
+          <div class="progress-step completed" id="step-billing">
+            <div class="step-circle">5</div>
+            <div class="step-label">Billing</div>
+          </div>
+          <div class="progress-step active" id="step-instructions">
+            <div class="step-circle">6</div>
+            <div class="step-label">Label/Instructions</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thank You Header -->
+      <div class="thank-you-header">
+        <h2 class="thank-you-title">Thank You For Your Order!</h2>
+        <p class="thank-you-sub">
+          Your mail-in sharpening request is registered. We have pre-composed your estimate email draft &mdash; please make sure to send it from your mail app so we can match your package. Follow the three steps below to ship us your blades.
+        </p>
+      </div>
+
+      <!-- Visual Process Steps -->
+      <div class="steps-grid">
+        
+        <!-- Step 1: Packaging -->
+        <div class="step-card">
+          <div class="step-number-tag">01</div>
+          <div class="step-icon-wrapper">
+            <!-- Knife in package SVG -->
+            <svg class="step-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <line x1="8" y1="11" x2="16" y2="11"></line>
+              <line x1="12" y1="7" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <h3 class="step-card-title">1. Package Safely</h3>
+          <p class="step-card-desc">
+            Wrap each knife blade in heavy cardboard or several layers of bubble wrap. Tape it tightly so the blade cannot shift.
+            <span class="safety-alert">⚠️ Safety first: ensure tips cannot pierce the packaging!</span>
+          </p>
+        </div>
+
+        <!-- Step 2: Label -->
+        <div class="step-card">
+          <div class="step-number-tag">02</div>
+          <div class="step-icon-wrapper">
+            <!-- Shipping Label SVG -->
+            <svg class="step-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+              <line x1="7" y1="8" x2="17" y2="8"></line>
+              <line x1="7" y1="12" x2="17" y2="12"></line>
+              <line x1="7" y1="16" x2="13" y2="16"></line>
+            </svg>
+          </div>
+          <h3 class="step-card-title">2. Label Package</h3>
+          <p class="step-card-desc">
+            Print and attach the mailing label Matthew sends to your contact email. Write your return address clearly on the exterior box.
+          </p>
+        </div>
+
+        <!-- Step 3: Post Office -->
+        <div class="step-card">
+          <div class="step-number-tag">03</div>
+          <div class="step-icon-wrapper">
+            <!-- Post office/Mailbox storefront SVG -->
+            <svg class="step-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </div>
+          <h3 class="step-card-title">3. Ship Package</h3>
+          <p class="step-card-desc">
+            Drop off your package at any USPS post office location, or hand it to your local mail carrier. We'll alert you the moment it arrives!
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Action Button -->
+      <div class="actions-section">
+        <a href="index.html" class="cta-button">Back to Homepage</a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Vanguard Sharpening &middot; Matthew Johnson</footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Clear estimates cache from localStorage on success page load
+      localStorage.removeItem('sharpeningEstimate');
+      localStorage.removeItem('shippingDetails');
+      localStorage.removeItem('shippingMethod');
+    });
+  </script>
+
+</body>
+
+</html>
