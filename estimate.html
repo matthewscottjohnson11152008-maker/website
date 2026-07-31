@@ -570,6 +570,71 @@
       display: none;
     }
 
+    /* Segmented Progress Tracker */
+    .progress-tracker {
+      display: flex;
+      gap: 0.8rem;
+      max-width: 750px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+    }
+
+    .progress-segment {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .segment-bar {
+      height: 4px;
+      width: 100%;
+      background: rgba(201, 168, 76, 0.15);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .segment-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: var(--gold);
+      transition: width 0.4s ease;
+    }
+
+    .progress-segment.active .segment-bar::after {
+      width: 100%;
+      box-shadow: 0 0 8px rgba(232, 203, 106, 0.6);
+    }
+
+    .progress-segment.completed .segment-bar::after {
+      width: 100%;
+      background: var(--gold-lt);
+    }
+
+    .segment-label {
+      margin-top: 0.6rem;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.4s;
+    }
+
+    .progress-segment.active .segment-label {
+      color: var(--white);
+    }
+
+    .progress-segment.completed .segment-label {
+      color: var(--gold-lt);
+    }
   </style>
 </head>
 
@@ -587,6 +652,37 @@
   </nav>
 
   <div class="container">
+    <!-- Progress Indicator -->
+    <div class="progress-tracker">
+      <div class="progress-segment active" id="step-estimate">
+        <div class="segment-bar"></div>
+        <div class="segment-label">Estimate</div>
+      </div>
+      <div class="progress-segment" id="step-routing">
+        <div class="segment-bar"></div>
+        <div class="segment-label">Routing</div>
+      </div>
+      <div class="progress-segment" id="step-credentials">
+        <div class="segment-bar"></div>
+        <div class="segment-label">Credentials</div>
+      </div>
+      <div class="progress-segment" id="step-scheduling">
+        <div class="segment-bar"></div>
+        <div class="segment-label">Scheduling</div>
+      </div>
+      <div class="progress-segment" id="step-payment">
+        <div class="segment-bar"></div>
+        <div class="segment-label">Payment</div>
+      </div>
+      <div class="progress-segment" id="step-preferences">
+        <div class="segment-bar"></div>
+        <div class="segment-label">Preferences</div>
+      </div>
+      <div class="progress-segment" id="step-instructions">
+        <div class="segment-bar"></div>
+        <div class="segment-label">Instructions</div>
+      </div>
+    </div>
 
     <div class="header-section">
       <p class="label">Complete Rate Sheet</p>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Preferences - Vanguard Sharpening</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --border: rgba(201, 168, 76, 0.18);
+      --gold: #c9a84c;
+      --gold-lt: #e8cb6a;
+      --text: #c8c8c8;
+      --muted: #767676;
+      --white: #f0f0f0;
+      --glow: rgba(201, 168, 76, 0.15);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13, 13, 13, 0.96);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-brand {
+      font-family: 'Cinzel', serif;
+      font-size: .85rem;
+      letter-spacing: .14em;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    /* Container */
+    .pref-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .pref-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 100%;
+      max-width: 800px;
+      padding: 3.5rem 3rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .8rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.8rem, 4vw, 2.3rem);
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: .05em;
+      margin-bottom: 0.8rem;
+      text-align: center;
+    }
+
+    .lead-text {
+      text-align: center;
+      font-size: 0.92rem;
+      color: var(--muted);
+      max-width: 580px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* Segmented Progress Tracker */
+    .progress-tracker {
+      display: flex;
+      gap: 1rem;
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+      padding: 0 1rem;
+    }
+
+    .progress-segment {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .segment-bar {
+      height: 4px;
+      width: 100%;
+      background: rgba(201, 168, 76, 0.15);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .segment-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: var(--gold);
+      transition: width 0.4s ease;
+    }
+
+    .progress-segment.active .segment-bar::after {
+      width: 100%;
+      box-shadow: 0 0 8px rgba(232, 203, 106, 0.6);
+    }
+
+    .progress-segment.completed .segment-bar::after {
+      width: 100%;
+      background: var(--gold-lt);
+    }
+
+    .segment-label {
+      margin-top: 0.6rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.4s;
+    }
+
+    .progress-segment.active .segment-label {
+      color: var(--white);
+    }
+
+    .progress-segment.completed .segment-label {
+      color: var(--gold-lt);
+    }
+
+    /* Options grid */
+    .options-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      .options-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+
+    .pref-option-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: rgba(13, 13, 13, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2.5rem 1.8rem;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .pref-option-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(201, 168, 76, 0.08);
+      background: rgba(201, 168, 76, 0.01);
+    }
+
+    .option-icon-container {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(201, 168, 76, 0.04);
+      border: 1px solid rgba(201, 168, 76, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: var(--gold-lt);
+      transition: all 0.3s;
+    }
+
+    .pref-option-card:hover .option-icon-container {
+      background: rgba(201, 168, 76, 0.1);
+      border-color: var(--gold-lt);
+      box-shadow: 0 0 15px rgba(232, 203, 106, 0.25);
+    }
+
+    .option-icon {
+      width: 30px;
+      height: 30px;
+      transition: transform 0.3s;
+    }
+
+    .pref-option-card:hover .option-icon {
+      transform: scale(1.1);
+    }
+
+    .option-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.04em;
+    }
+
+    .option-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Back Link */
+    .back-container {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--gold-lt);
+      transform: translateX(-3px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: .75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      margin-top: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a class="nav-brand" href="index.html#top">Vanguard Sharpening</a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="about.html" style="color: var(--gold-lt); font-weight: 600; text-shadow: 0 0 8px rgba(232, 203, 106, 0.3);">About Me</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#reviews">Reviews</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="pref-wrapper">
+    <div class="pref-card">
+      
+      <!-- Progress Indicator -->
+      <div class="progress-tracker">
+        <div class="progress-segment completed" id="step-estimate">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Estimate</div>
+        </div>
+        <div class="progress-segment completed" id="step-routing">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Routing</div>
+        </div>
+        <div class="progress-segment completed" id="step-credentials">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Credentials</div>
+        </div>
+        <div class="progress-segment completed" id="step-scheduling">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Scheduling</div>
+        </div>
+        <div class="progress-segment completed" id="step-payment">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Payment</div>
+        </div>
+        <div class="progress-segment active" id="step-preferences">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Preferences</div>
+        </div>
+        <div class="progress-segment" id="step-instructions">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Instructions</div>
+        </div>
+      </div>
+
+      <p class="label">Contact Preferences</p>
+      <h1>Choose Contact Method</h1>
+      <p class="lead-text">We will pre-populate your order details. Select whether you prefer to reach Matthew via text message/SMS or Google Gmail.</p>
+
+      <div class="options-container">
+        <!-- SMS Option -->
+        <a href="javascript:void(0)" id="smsPrefBtn" class="pref-option-card">
+          <div class="option-icon-container">
+            <!-- SMS Speech Bubble icon -->
+            <svg class="option-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <h2 class="option-title">Contact via SMS</h2>
+          <p class="option-desc">Ideal for mobile devices. Open your text messaging app with a pre-filled order draft directly to Matthew's cell phone.</p>
+        </a>
+
+        <!-- Gmail Option -->
+        <a href="javascript:void(0)" id="gmailPrefBtn" class="pref-option-card">
+          <div class="option-icon-container">
+            <!-- Gmail envelope icon -->
+            <svg class="option-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <h2 class="option-title">Contact via Gmail</h2>
+          <p class="option-desc">Ideal for computers or browser mail. Open Google Gmail compose in a new tab pre-filled with the order details.</p>
+        </a>
+      </div>
+
+      <div class="back-container">
+        <a href="local-payment.html" class="back-link">
+          &larr; Back to Payment
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Vanguard Sharpening &middot; Matthew Johnson</footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1. Retrieve cache data
+      var estimate = localStorage.getItem('sharpeningEstimate');
+      var detailsData = localStorage.getItem('localDetails');
+      
+      var details = { name: '', email: '', phone: '', address: '', zip: '' };
+      if (detailsData) {
+        try {
+          details = JSON.parse(detailsData);
+        } catch(e) {
+          console.error(e);
+        }
+      }
+
+      var recipientEmail = 'vanguardsharpening88@gmail.com';
+      var recipientPhone = '6162747104'; // Matthew's phone number
+
+      // 2. Format customer contact methods
+      var contactMethod = '';
+      if (details.email && details.phone) {
+        contactMethod = details.email + ' / ' + details.phone;
+      } else {
+        contactMethod = details.email || details.phone || 'Not provided';
+      }
+
+      var scheduleData = localStorage.getItem('localSchedule');
+      var scheduleInfo = 'Not scheduled';
+      if (scheduleData) {
+        try {
+          var sched = JSON.parse(scheduleData);
+          scheduleInfo = (sched.date || '') + ' during ' + (sched.time || '');
+        } catch(e) {
+          console.error(e);
+        }
+      }
+
+      // 3. Assemble message text
+      var emailBody = 'Hi Matthew,\n\n';
+      emailBody += 'I would like to book a local drop-off knife sharpening service in Grand Rapids.\n\n';
+      emailBody += '--- CUSTOMER DETAILS ---\n';
+      emailBody += 'Name: ' + (details.name || 'Not provided') + '\n';
+      emailBody += 'Street Address: ' + (details.address || 'Not provided') + '\n';
+      emailBody += 'Zip Code: ' + (details.zip || 'Not provided') + '\n';
+      emailBody += 'Contact info: ' + contactMethod + '\n\n';
+      
+      emailBody += '--- PICKUP SCHEDULE ---\n';
+      emailBody += 'Requested: ' + scheduleInfo + '\n\n';
+
+      emailBody += '--- BLADE ESTIMATE ---\n';
+      if (estimate) {
+        var cleanEstimate = estimate.replace('Hi Matthew,\n\nI would like to book a sharpening service. ', '');
+        emailBody += cleanEstimate;
+      } else {
+        emailBody += 'Estimate details unavailable';
+      }
+      emailBody += '\n\n';
+      emailBody += 'Please let me know when and where I can drop off my blades.\n\n';
+      emailBody += 'Best regards,\n';
+      emailBody += (details.name || '');
+
+      var subjectText = 'New Local Sharpening Order - ' + (details.name || '');
+
+      // 4. Set Gmail click trigger
+      document.getElementById('gmailPrefBtn').addEventListener('click', function() {
+        var gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(recipientEmail) + '&su=' + encodeURIComponent(subjectText) + '&body=' + encodeURIComponent(emailBody);
+        window.open(gmailUrl, '_blank');
+        window.location.href = 'local-instructions.html';
+      });
+
+      // 5. Set SMS click trigger
+      document.getElementById('smsPrefBtn').addEventListener('click', function() {
+        // Detect OS for sms body query separator
+        var ua = navigator.userAgent.toLowerCase();
+        var isiOS = /ipad|iphone|ipod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        var isMac = /macintosh|mac os x/.test(ua);
+        var separator = (isiOS || isMac) ? '&' : '?';
+
+        var smsUrl = 'sms:' + recipientPhone + separator + 'body=' + encodeURIComponent(emailBody);
+        window.open(smsUrl, '_blank');
+        window.location.href = 'local-instructions.html';
+      });
+    });
+  </script>
+
+</body>
+
+</html>

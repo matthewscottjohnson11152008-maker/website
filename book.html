@@ -277,93 +277,130 @@
       transform: translateX(-3px);
     }
 
-    /* Progress Indicator */
-    .progress-container {
-      max-width: 700px;
+    /* Disabled Option Card */
+    .option-card.disabled {
+      pointer-events: none;
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .option-card.disabled:hover {
+      transform: none;
+      box-shadow: none;
+      background: rgba(13, 13, 13, 0.4);
+      border-color: var(--border);
+    }
+
+    .option-card.disabled:hover .option-icon-container {
+      background: rgba(201, 168, 76, 0.06);
+      border-color: rgba(201, 168, 76, 0.15);
+      box-shadow: none;
+    }
+
+    /* Disabled Option Card */
+    .option-card.disabled {
+      pointer-events: none;
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .option-card.disabled:hover {
+      transform: none;
+      box-shadow: none;
+      background: rgba(13, 13, 13, 0.4);
+      border-color: var(--border);
+    }
+
+    .option-card.disabled:hover .option-icon-container {
+      background: rgba(201, 168, 76, 0.06);
+      border-color: rgba(201, 168, 76, 0.15);
+      box-shadow: none;
+    }
+
+    .option-card.disabled:hover .option-icon {
+      transform: none;
+      filter: none;
+    }
+
+    .not-available-badge {
+      display: inline-block;
+      background: rgba(207, 102, 121, 0.12);
+      border: 1px solid #cf6679;
+      color: #ff8a9a;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.7rem;
+      border-radius: 20px;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 0 10px rgba(207, 102, 121, 0.1);
+    }
+
+    /* Segmented Progress Tracker */
+    .progress-tracker {
+      display: flex;
+      gap: 1rem;
+      max-width: 500px;
       margin: 0 auto 3rem;
-      position: relative;
       padding: 0 1rem;
     }
 
-    .progress-bar-line {
-      position: absolute;
-      top: 20px;
-      left: 3rem;
-      right: 3rem;
-      height: 2px;
-      background: rgba(201, 168, 76, 0.15);
-      z-index: 1;
+    .progress-segment {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
     }
 
-    .progress-bar-fill {
+    .segment-bar {
+      height: 4px;
+      width: 100%;
+      background: rgba(201, 168, 76, 0.15);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .segment-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
       height: 100%;
+      width: 0%;
       background: var(--gold);
       transition: width 0.4s ease;
     }
 
-    .progress-steps {
-      display: flex;
-      justify-content: space-between;
-      position: relative;
-      z-index: 2;
+    .progress-segment.active .segment-bar::after {
+      width: 100%;
+      box-shadow: 0 0 8px rgba(232, 203, 106, 0.6);
     }
 
-    .progress-step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      position: relative;
-      z-index: 2;
+    .progress-segment.completed .segment-bar::after {
+      width: 100%;
+      background: var(--gold-lt);
     }
 
-    .step-circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--surface);
-      border: 2px solid rgba(201, 168, 76, 0.3);
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.4s ease;
-      position: relative;
-      z-index: 3;
-    }
-
-    .step-label {
+    .segment-label {
+      margin-top: 0.6rem;
       font-size: 0.68rem;
       font-weight: 600;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-top: 0.6rem;
-      transition: all 0.4s ease;
+      transition: color 0.4s;
     }
 
-    /* Active Step Styling */
-    .progress-step.active .step-circle {
-      border-color: var(--gold-lt);
-      background: var(--gold);
-      color: #0d0d0d;
-      box-shadow: 0 0 15px rgba(232, 203, 106, 0.4);
-    }
-
-    .progress-step.active .step-label {
+    .progress-segment.active .segment-label {
       color: var(--white);
     }
 
-    /* Completed Step Styling */
-    .progress-step.completed .step-circle {
-      border-color: var(--gold);
-      background: rgba(201, 168, 76, 0.15);
-      color: var(--gold-lt);
-    }
-
-    .progress-step.completed .step-label {
+    .progress-segment.completed .segment-label {
       color: var(--gold-lt);
     }
   </style>
@@ -385,35 +422,34 @@
   <div class="booking-wrapper">
     <div class="booking-card">
       <!-- Progress Indicator -->
-      <div class="progress-container">
-        <div class="progress-bar-line">
-          <div class="progress-bar-fill" style="width: 20%;"></div>
+      <div class="progress-tracker">
+        <div class="progress-segment completed" id="step-estimate">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Estimate</div>
         </div>
-        <div class="progress-steps">
-          <div class="progress-step completed" id="step-estimate">
-            <div class="step-circle">1</div>
-            <div class="step-label">Estimate</div>
-          </div>
-          <div class="progress-step active" id="step-routing">
-            <div class="step-circle">2</div>
-            <div class="step-label">Routing</div>
-          </div>
-          <div class="progress-step" id="step-address">
-            <div class="step-circle">3</div>
-            <div class="step-label">Address</div>
-          </div>
-          <div class="progress-step" id="step-shipping">
-            <div class="step-circle">4</div>
-            <div class="step-label">Shipping</div>
-          </div>
-          <div class="progress-step" id="step-billing">
-            <div class="step-circle">5</div>
-            <div class="step-label">Billing</div>
-          </div>
-          <div class="progress-step" id="step-instructions">
-            <div class="step-circle">6</div>
-            <div class="step-label">Instructions</div>
-          </div>
+        <div class="progress-segment active" id="step-routing">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Routing</div>
+        </div>
+        <div class="progress-segment" id="step-credentials">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Credentials</div>
+        </div>
+        <div class="progress-segment" id="step-scheduling">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Scheduling</div>
+        </div>
+        <div class="progress-segment" id="step-payment">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Payment</div>
+        </div>
+        <div class="progress-segment" id="step-preferences">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Preferences</div>
+        </div>
+        <div class="progress-segment" id="step-instructions">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Instructions</div>
         </div>
       </div>
 
@@ -423,7 +459,7 @@
 
       <div class="options-container">
         <!-- Local Option Card -->
-        <a href="#" id="localBookingLink" class="option-card">
+        <a href="local-credentials.html" id="localBookingLink" class="option-card">
           <div class="option-icon-container">
             <!-- Google Maps style pin logo -->
             <svg class="option-icon pin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -436,7 +472,8 @@
         </a>
 
         <!-- Mail-in Option Card -->
-        <a href="shipping-info.html" id="mailBookingLink" class="option-card">
+        <a href="javascript:void(0)" id="mailBookingLink" class="option-card disabled">
+          <span class="not-available-badge">Not Available</span>
           <div class="option-icon-container">
             <!-- Package/Box Logo -->
             <svg class="option-icon package-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -453,8 +490,8 @@
       </div>
 
       <div class="back-container">
-        <a href="pricing.html" class="back-link">
-          &larr; Back to Pricing Calculator
+        <a href="estimate.html" class="back-link">
+          &larr; Back to Estimate
         </a>
       </div>
     </div>
@@ -462,28 +499,7 @@
 
   <footer>&copy; 2026 Vanguard Sharpening &middot; Matthew Johnson</footer>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Retrieve estimate details from localStorage
-      var estimate = localStorage.getItem('sharpeningEstimate');
-      var recipient = 'vanguardsharpening88@gmail.com';
-
-      // 1. Build Local Mailto link
-      var localSubject = encodeURIComponent('Local Sharpening Booking - Vanguard Sharpening');
-      var localBody = '';
-      if (estimate) {
-        localBody += 'Hi Matthew,\n\nI would like to book a local sharpening service in Grand Rapids.\n\nHere are my estimated order details:\n';
-        // Clean out the original header if it exists
-        var cleanEstimate = estimate.replace('Hi Matthew,\n\nI would like to book a sharpening service. ', '');
-        localBody += cleanEstimate;
-        localBody += '\n\nPlease let me know when and where I can drop off my blades.\n\nBest regards,';
-      } else {
-        localBody += 'Hi Matthew,\n\nI would like to book a local sharpening service in Grand Rapids. Please let me know how to proceed.\n\nBest regards,';
-      }
-      var localMailto = 'mailto:' + recipient + '?subject=' + localSubject + '&body=' + encodeURIComponent(localBody);
-      document.getElementById('localBookingLink').setAttribute('href', localMailto);
-    });
-  </script>
+  <!-- No script needed for book.html since local booking details page handles mailto -->
 
 </body>
 

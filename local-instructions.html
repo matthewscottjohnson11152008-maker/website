@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shipping Instructions - Vanguard Sharpening</title>
+  <title>Local Drop-off Instructions - Vanguard Sharpening</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@600;700&display=swap"
     rel="stylesheet" />
@@ -104,91 +104,69 @@
       position: relative;
     }
 
-    /* Progress Indicator */
-    .progress-container {
-      max-width: 700px;
+    /* Segmented Progress Tracker */
+    .progress-tracker {
+      display: flex;
+      gap: 1rem;
+      max-width: 500px;
       margin: 0 auto 2.5rem;
-      position: relative;
       padding: 0 1rem;
     }
 
-    .progress-bar-line {
-      position: absolute;
-      top: 20px;
-      left: 3rem;
-      right: 3rem;
-      height: 2px;
-      background: rgba(201, 168, 76, 0.15);
-      z-index: 1;
+    .progress-segment {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
     }
 
-    .progress-bar-fill {
+    .segment-bar {
+      height: 4px;
+      width: 100%;
+      background: rgba(201, 168, 76, 0.15);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .segment-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
       height: 100%;
+      width: 0%;
       background: var(--gold);
       transition: width 0.4s ease;
     }
 
-    .progress-steps {
-      display: flex;
-      justify-content: space-between;
-      position: relative;
-      z-index: 2;
+    .progress-segment.active .segment-bar::after {
+      width: 100%;
+      box-shadow: 0 0 8px rgba(232, 203, 106, 0.6);
     }
 
-    .progress-step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      position: relative;
-      z-index: 2;
+    .progress-segment.completed .segment-bar::after {
+      width: 100%;
+      background: var(--gold-lt);
     }
 
-    .step-circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--surface);
-      border: 2px solid rgba(201, 168, 76, 0.3);
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.4s ease;
-      position: relative;
-      z-index: 3;
-    }
-
-    .step-label {
+    .segment-label {
+      margin-top: 0.6rem;
       font-size: 0.68rem;
       font-weight: 600;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-top: 0.6rem;
-      transition: all 0.4s ease;
+      transition: color 0.4s;
     }
 
-    .progress-step.active .step-circle {
-      border-color: var(--gold-lt);
-      background: var(--gold);
-      color: #0d0d0d;
-      box-shadow: 0 0 15px rgba(232, 203, 106, 0.4);
-    }
-
-    .progress-step.active .step-label {
+    .progress-segment.active .segment-label {
       color: var(--white);
     }
 
-    .progress-step.completed .step-circle {
-      border-color: var(--gold);
-      background: rgba(201, 168, 76, 0.15);
-      color: var(--gold-lt);
-    }
-
-    .progress-step.completed .step-label {
+    .progress-segment.completed .segment-label {
       color: var(--gold-lt);
     }
 
@@ -200,7 +178,7 @@
 
     .thank-you-title {
       font-family: 'Cinzel', serif;
-      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-size: clamp(1.6rem, 4vw, 2.3rem);
       font-weight: 600;
       color: var(--gold-lt);
       letter-spacing: 0.08em;
@@ -209,7 +187,7 @@
     }
 
     .thank-you-sub {
-      max-width: 600px;
+      max-width: 650px;
       margin: 0 auto;
       font-size: 0.95rem;
       color: var(--text);
@@ -219,12 +197,19 @@
     /* Visual Instructions Cards */
     .steps-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
       margin-bottom: 3.5rem;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 992px) {
+      .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 600px) {
       .steps-grid {
         grid-template-columns: 1fr;
         gap: 2.5rem;
@@ -300,13 +285,6 @@
       line-height: 1.6;
     }
 
-    .safety-alert {
-      color: var(--gold-lt);
-      font-weight: 600;
-      margin-top: 0.4rem;
-      display: block;
-    }
-
     /* Actions */
     .actions-section {
       text-align: center;
@@ -339,6 +317,31 @@
       box-shadow: 0 6px 20px rgba(201, 168, 76, 0.4);
     }
 
+    /* Pickup Reminder Callout */
+    .pickup-notice {
+      background: rgba(201, 168, 76, 0.03);
+      border: 1px dashed var(--gold);
+      border-radius: 4px;
+      padding: 1.2rem 1.8rem;
+      max-width: 750px;
+      margin: 0 auto 2.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--white);
+      box-shadow: 0 4px 15px rgba(201, 168, 76, 0.02);
+    }
+
+    .pickup-notice strong {
+      color: var(--gold-lt);
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+      display: block;
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
     footer {
       text-align: center;
       padding: 2rem;
@@ -368,98 +371,119 @@
     <div class="instructions-card">
       
       <!-- Progress Indicator -->
-      <div class="progress-container">
-        <div class="progress-bar-line">
-          <div class="progress-bar-fill" style="width: 100%;"></div>
+      <div class="progress-tracker">
+        <div class="progress-segment completed" id="step-estimate">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Estimate</div>
         </div>
-        <div class="progress-steps">
-          <div class="progress-step completed" id="step-estimate">
-            <div class="step-circle">1</div>
-            <div class="step-label">Estimate</div>
-          </div>
-          <div class="progress-step completed" id="step-routing">
-            <div class="step-circle">2</div>
-            <div class="step-label">Routing</div>
-          </div>
-          <div class="progress-step completed" id="step-address">
-            <div class="step-circle">3</div>
-            <div class="step-label">Address</div>
-          </div>
-          <div class="progress-step completed" id="step-shipping">
-            <div class="step-circle">4</div>
-            <div class="step-label">Shipping</div>
-          </div>
-          <div class="progress-step completed" id="step-billing">
-            <div class="step-circle">5</div>
-            <div class="step-label">Billing</div>
-          </div>
-          <div class="progress-step active" id="step-instructions">
-            <div class="step-circle">6</div>
-            <div class="step-label">Label/Instructions</div>
-          </div>
+        <div class="progress-segment completed" id="step-routing">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Routing</div>
+        </div>
+        <div class="progress-segment completed" id="step-credentials">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Credentials</div>
+        </div>
+        <div class="progress-segment completed" id="step-scheduling">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Scheduling</div>
+        </div>
+        <div class="progress-segment completed" id="step-payment">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Payment</div>
+        </div>
+        <div class="progress-segment completed" id="step-preferences">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Preferences</div>
+        </div>
+        <div class="progress-segment active" id="step-instructions">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Instructions</div>
         </div>
       </div>
 
       <!-- Thank You Header -->
       <div class="thank-you-header">
-        <h2 class="thank-you-title">Thank You For Your Order!</h2>
+        <h2 class="thank-you-title">Thank You For Your Booking Request!</h2>
         <p class="thank-you-sub">
-          Your mail-in sharpening request is registered. We have pre-composed your estimate email draft &mdash; please make sure to send it from your mail app so we can match your package. Follow the three steps below to ship us your blades.
+          Your request details have been registered, and a pre-composed draft has been prepared. **Please click send on the text message or Gmail window** so Matthew can receive your request and arrange your drop-off appointment. Follow these steps to prepare:
         </p>
+      </div>
+
+      <!-- Important Pickup Reminder Callout -->
+      <div class="pickup-notice">
+        <strong>Important Pickup Note</strong>
+        Please leave your wrapped package by your front door or mailbox on the scheduled pickup day. Any additional instructions or gate codes must be communicated to Matthew prior to pickup.
       </div>
 
       <!-- Visual Process Steps -->
       <div class="steps-grid">
         
-        <!-- Step 1: Packaging -->
+        <!-- Step 1: Wrap Securely -->
         <div class="step-card">
           <div class="step-number-tag">01</div>
           <div class="step-icon-wrapper">
-            <!-- Knife in package SVG -->
+            <!-- Safe wrap SVG -->
             <svg class="step-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
               <line x1="8" y1="11" x2="16" y2="11"></line>
               <line x1="12" y1="7" x2="12" y2="15"></line>
             </svg>
           </div>
-          <h3 class="step-card-title">1. Package Safely</h3>
+          <h3 class="step-card-title">1. Wrap Securely</h3>
           <p class="step-card-desc">
-            Wrap each knife blade in heavy cardboard or several layers of bubble wrap. Tape it tightly so the blade cannot shift.
-            <span class="safety-alert">⚠️ Safety first: ensure tips cannot pierce the packaging!</span>
+            Place blades inside heavy cardboard sleeves, or wrap them thoroughly in a thick towel. Bind with rubber bands or tape to ensure safe transport.
           </p>
         </div>
 
-        <!-- Step 2: Label -->
+        <!-- Step 2: Coordinated Pick-Up -->
         <div class="step-card">
           <div class="step-number-tag">02</div>
           <div class="step-icon-wrapper">
-            <!-- Shipping Label SVG -->
+            <!-- Calendar SVG -->
             <svg class="step-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="18" height="16" rx="2"></rect>
-              <line x1="7" y1="8" x2="17" y2="8"></line>
-              <line x1="7" y1="12" x2="17" y2="12"></line>
-              <line x1="7" y1="16" x2="13" y2="16"></line>
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
             </svg>
           </div>
-          <h3 class="step-card-title">2. Label Package</h3>
+          <h3 class="step-card-title">2. Coordinated Pick-Up</h3>
           <p class="step-card-desc">
-            Print and attach the mailing label Matthew sends to your contact email. Write your return address clearly on the exterior box.
+            Matthew will pick up the knives at your location. Check your email or text messages; Matthew will coordinate a convenient pick-up window with you.
           </p>
         </div>
 
-        <!-- Step 3: Post Office -->
+        <!-- Step 3: Delivery -->
         <div class="step-card">
           <div class="step-number-tag">03</div>
           <div class="step-icon-wrapper">
-            <!-- Post office/Mailbox storefront SVG -->
+            <!-- Map Pin SVG -->
             <svg class="step-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
             </svg>
           </div>
-          <h3 class="step-card-title">3. Ship Package</h3>
+          <h3 class="step-card-title">3. Delivery</h3>
           <p class="step-card-desc">
-            Drop off your package at any USPS post office location, or hand it to your local mail carrier. We'll alert you the moment it arrives!
+            Once your blades are expertly sharpened, they will be delivered back to your location. Serviced blades are returned safely wrapped.
+          </p>
+        </div>
+
+        <!-- Step 4: Secure Payment -->
+        <div class="step-card">
+          <div class="step-number-tag">04</div>
+          <div class="step-icon-wrapper">
+            <!-- Cash/Card SVG -->
+            <svg class="step-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+              <circle cx="12" cy="12" r="2"></circle>
+              <path d="M6 12h.01M18 12h.01"></path>
+            </svg>
+          </div>
+          <h3 class="step-card-title">4. Post-Delivery Payment</h3>
+          <p class="step-card-desc">
+            Submit cash payment upon delivery, or pay electronically via Venmo to <strong>@mattsjohnson56</strong> once your sharpened blades are returned.
           </p>
         </div>
 
@@ -477,10 +501,10 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Clear estimates cache from localStorage on success page load
+      // Clear dynamic estimate cache from localstorage
       localStorage.removeItem('sharpeningEstimate');
-      localStorage.removeItem('shippingDetails');
-      localStorage.removeItem('shippingMethod');
+      localStorage.removeItem('localDetails');
+      localStorage.removeItem('localSchedule');
     });
   </script>
 

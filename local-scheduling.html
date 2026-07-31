@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Schedule Pickup - Vanguard Sharpening</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --border: rgba(201, 168, 76, 0.18);
+      --gold: #c9a84c;
+      --gold-lt: #e8cb6a;
+      --text: #c8c8c8;
+      --muted: #767676;
+      --white: #f0f0f0;
+      --glow: rgba(201, 168, 76, 0.15);
+      --error: #cf6679;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13, 13, 13, 0.96);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-brand {
+      font-family: 'Cinzel', serif;
+      font-size: .85rem;
+      letter-spacing: .14em;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    /* Container */
+    .form-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 100%;
+      max-width: 600px;
+      padding: 3rem 2.5rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .8rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.8rem, 4vw, 2.3rem);
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: .05em;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    /* Segmented Progress Tracker */
+    .progress-tracker {
+      display: flex;
+      gap: 0.8rem;
+      max-width: 750px;
+      margin: 0 auto 2.5rem;
+      padding: 0 1rem;
+    }
+
+    .progress-segment {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .segment-bar {
+      height: 4px;
+      width: 100%;
+      background: rgba(201, 168, 76, 0.15);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .segment-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: var(--gold);
+      transition: width 0.4s ease;
+    }
+
+    .progress-segment.active .segment-bar::after {
+      width: 100%;
+      box-shadow: 0 0 8px rgba(232, 203, 106, 0.6);
+    }
+
+    .progress-segment.completed .segment-bar::after {
+      width: 100%;
+      background: var(--gold-lt);
+    }
+
+    .segment-label {
+      margin-top: 0.6rem;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.4s;
+    }
+
+    .progress-segment.active .segment-label {
+      color: var(--white);
+    }
+
+    .progress-segment.completed .segment-label {
+      color: var(--gold-lt);
+    }
+
+    /* Form Fields styling */
+    .form-group {
+      margin-bottom: 1.8rem;
+      position: relative;
+    }
+
+    label.field-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+      margin-bottom: 0.5rem;
+    }
+
+    label.field-label span.req {
+      color: var(--gold);
+      margin-left: 2px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(13, 13, 13, 0.6);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 0.8rem 1rem;
+      font-family: inherit;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(201, 168, 76, 0.1);
+    }
+
+    .form-input.input-error {
+      border-color: var(--error);
+      box-shadow: 0 0 10px rgba(207, 102, 121, 0.15);
+    }
+
+    select.form-input {
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='%23c9a84c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.2rem;
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 0.75rem;
+      margin-top: 0.4rem;
+      display: none;
+    }
+
+    /* CTA Buttons */
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gold);
+      color: #0d0d0d;
+      border: 1px solid var(--gold);
+      padding: 0.9rem 2.2rem;
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(201, 168, 76, 0.2);
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .cta-button:hover {
+      background: transparent;
+      color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.4);
+    }
+
+    .cta-button:active {
+      transform: translateY(0);
+    }
+
+    /* Back Link */
+    .back-container {
+      margin-top: 1.8rem;
+      text-align: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--gold-lt);
+      transform: translateX(-3px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: .75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      margin-top: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a class="nav-brand" href="index.html#top">Vanguard Sharpening</a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="about.html" style="color: var(--gold-lt); font-weight: 600; text-shadow: 0 0 8px rgba(232, 203, 106, 0.3);">About Me</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#reviews">Reviews</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="form-wrapper">
+    <div class="form-card">
+      
+      <!-- Progress Indicator -->
+      <div class="progress-tracker">
+        <div class="progress-segment completed" id="step-estimate">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Estimate</div>
+        </div>
+        <div class="progress-segment completed" id="step-routing">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Routing</div>
+        </div>
+        <div class="progress-segment completed" id="step-credentials">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Credentials</div>
+        </div>
+        <div class="progress-segment active" id="step-scheduling">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Scheduling</div>
+        </div>
+        <div class="progress-segment" id="step-payment">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Payment</div>
+        </div>
+        <div class="progress-segment" id="step-preferences">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Preferences</div>
+        </div>
+        <div class="progress-segment" id="step-instructions">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Instructions</div>
+        </div>
+      </div>
+
+      <p class="label">Local Booking</p>
+      <h1>Schedule Pickup</h1>
+
+      <form id="pickupScheduleForm" novalidate>
+        <!-- Date Picker -->
+        <div class="form-group">
+          <label class="field-label" for="pickupDate">Pickup Date<span class="req">*</span></label>
+          <input type="date" id="pickupDate" class="form-input" required />
+          <div class="error-msg" id="dateError">Please select a valid pickup date.</div>
+        </div>
+
+        <!-- Time Dropdown -->
+        <div class="form-group">
+          <label class="field-label" for="pickupTime">Convenient Time Slot<span class="req">*</span></label>
+          <select id="pickupTime" class="form-input" required>
+            <option value="">-- Select Pickup Window --</option>
+            <option value="Morning (8:00 AM - 12:00 PM)">Morning (8:00 AM - 12:00 PM)</option>
+            <option value="Afternoon (12:00 PM - 4:00 PM)">Afternoon (12:00 PM - 4:00 PM)</option>
+            <option value="Evening (4:00 PM - 8:00 PM)">Evening (4:00 PM - 8:00 PM)</option>
+          </select>
+          <div class="error-msg" id="timeError">Please select a convenient time window.</div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="cta-button">Proceed to Payment Information</button>
+      </form>
+
+      <div class="back-container">
+        <a href="local-credentials.html" class="back-link">
+          &larr; Back to Credentials
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Vanguard Sharpening &middot; Matthew Johnson</footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var form = document.getElementById('pickupScheduleForm');
+      var dateInput = document.getElementById('pickupDate');
+      var timeSelect = document.getElementById('pickupTime');
+      var dateError = document.getElementById('dateError');
+      var timeError = document.getElementById('timeError');
+
+      // Set min date to today
+      var todayStr = new Date().toISOString().split('T')[0];
+      dateInput.setAttribute('min', todayStr);
+
+      // Populate saved values if present
+      var savedSchedule = localStorage.getItem('localSchedule');
+      if (savedSchedule) {
+        try {
+          var schedule = JSON.parse(savedSchedule);
+          // Check that date is still valid (not in past)
+          if (schedule.date >= todayStr) {
+            dateInput.value = schedule.date || '';
+          }
+          timeSelect.value = schedule.time || '';
+        } catch(e) {
+          console.error(e);
+        }
+      }
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Reset
+        dateInput.classList.remove('input-error');
+        timeSelect.classList.remove('input-error');
+        dateError.style.display = 'none';
+        timeError.style.display = 'none';
+
+        var isValid = true;
+        var dateVal = dateInput.value;
+        var timeVal = timeSelect.value;
+
+        if (!dateVal) {
+          dateInput.classList.add('input-error');
+          dateError.style.display = 'block';
+          isValid = false;
+        } else if (dateVal < todayStr) {
+          dateInput.classList.add('input-error');
+          dateError.textContent = 'Please choose today or a future date.';
+          dateError.style.display = 'block';
+          isValid = false;
+        }
+
+        if (!timeVal) {
+          timeSelect.classList.add('input-error');
+          timeError.style.display = 'block';
+          isValid = false;
+        }
+
+        if (!isValid) return;
+
+        // Save
+        var scheduleObj = {
+          date: dateVal,
+          time: timeVal
+        };
+        localStorage.setItem('localSchedule', JSON.stringify(scheduleObj));
+
+        // Redirect to Payment info
+        window.location.href = 'local-payment.html';
+      });
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Information - Vanguard Sharpening</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --border: rgba(201, 168, 76, 0.18);
+      --gold: #c9a84c;
+      --gold-lt: #e8cb6a;
+      --text: #c8c8c8;
+      --muted: #767676;
+      --white: #f0f0f0;
+      --glow: rgba(201, 168, 76, 0.15);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13, 13, 13, 0.96);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-brand {
+      font-family: 'Cinzel', serif;
+      font-size: .85rem;
+      letter-spacing: .14em;
+      color: var(--gold-lt);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    /* Container */
+    .payment-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .payment-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 100%;
+      max-width: 800px;
+      padding: 3.5rem 3rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .8rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.8rem, 4vw, 2.3rem);
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: .05em;
+      margin-bottom: 0.8rem;
+      text-align: center;
+    }
+
+    .lead-text {
+      text-align: center;
+      font-size: 0.92rem;
+      color: var(--muted);
+      max-width: 580px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .lead-text strong {
+      color: var(--gold-lt);
+    }
+
+    /* Segmented Progress Tracker */
+    .progress-tracker {
+      display: flex;
+      gap: 1rem;
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+      padding: 0 1rem;
+    }
+
+    .progress-segment {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .segment-bar {
+      height: 4px;
+      width: 100%;
+      background: rgba(201, 168, 76, 0.15);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .segment-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: var(--gold);
+      transition: width 0.4s ease;
+    }
+
+    .progress-segment.active .segment-bar::after {
+      width: 100%;
+      box-shadow: 0 0 8px rgba(232, 203, 106, 0.6);
+    }
+
+    .progress-segment.completed .segment-bar::after {
+      width: 100%;
+      background: var(--gold-lt);
+    }
+
+    .segment-label {
+      margin-top: 0.6rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.4s;
+    }
+
+    .progress-segment.active .segment-label {
+      color: var(--white);
+    }
+
+    .progress-segment.completed .segment-label {
+      color: var(--gold-lt);
+    }
+
+    /* Methods grid */
+    .methods-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 600px) {
+      .methods-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+
+    .method-card {
+      background: rgba(13, 13, 13, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2.2rem 1.4rem;
+      text-align: center;
+      transition: all 0.3s;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .method-card.linkable:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(201, 168, 76, 0.05);
+      background: rgba(201, 168, 76, 0.01);
+    }
+
+    .icon-wrapper {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(201, 168, 76, 0.04);
+      border: 1px solid rgba(201, 168, 76, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+      color: var(--gold-lt);
+      transition: all 0.3s;
+    }
+
+    .method-card.linkable:hover .icon-wrapper {
+      background: rgba(201, 168, 76, 0.1);
+      border-color: var(--gold-lt);
+      box-shadow: 0 0 12px rgba(232, 203, 106, 0.2);
+    }
+
+    .card-icon {
+      width: 28px;
+      height: 28px;
+    }
+
+    .method-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.04em;
+    }
+
+    .method-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .action-text {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gold);
+      margin-top: auto;
+      padding-top: 1rem;
+      transition: color 0.2s;
+    }
+
+    .method-card.linkable:hover .action-text {
+      color: var(--white);
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+    }
+
+    /* CTA Buttons */
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gold);
+      color: #0d0d0d;
+      border: 1px solid var(--gold);
+      padding: 0.9rem 2.5rem;
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(201, 168, 76, 0.2);
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+    }
+
+    .cta-button:hover {
+      background: transparent;
+      color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.4);
+    }
+
+    /* Back Link */
+    .back-container {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--gold-lt);
+      transform: translateX(-3px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: .75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      margin-top: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a class="nav-brand" href="index.html#top">Vanguard Sharpening</a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="about.html" style="color: var(--gold-lt); font-weight: 600; text-shadow: 0 0 8px rgba(232, 203, 106, 0.3);">About Me</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#reviews">Reviews</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="payment-wrapper">
+    <div class="payment-card">
+      
+      <!-- Progress Indicator -->
+      <div class="progress-tracker">
+        <div class="progress-segment completed" id="step-estimate">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Estimate</div>
+        </div>
+        <div class="progress-segment completed" id="step-routing">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Routing</div>
+        </div>
+        <div class="progress-segment completed" id="step-credentials">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Credentials</div>
+        </div>
+        <div class="progress-segment completed" id="step-scheduling">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Scheduling</div>
+        </div>
+        <div class="progress-segment active" id="step-payment">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Payment</div>
+        </div>
+        <div class="progress-segment" id="step-preferences">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Preferences</div>
+        </div>
+        <div class="progress-segment" id="step-instructions">
+          <div class="segment-bar"></div>
+          <div class="segment-label">Instructions</div>
+        </div>
+      </div>
+
+      <p class="label">Informative Only</p>
+      <h1>Payment &amp; Timing</h1>
+      <p class="lead-text">
+        Please note that **payment is required after service is completed** and your blades are ready to be returned. We accept the following payment methods:
+      </p>
+
+      <div class="methods-grid">
+        <!-- Cash Card (Non-linkable) -->
+        <div class="method-card">
+          <div class="icon-wrapper">
+            <!-- Cash SVG -->
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+              <circle cx="12" cy="12" r="2"></circle>
+              <path d="M6 12h.01M18 12h.01"></path>
+            </svg>
+          </div>
+          <h2 class="method-title">Cash</h2>
+          <p class="method-desc">Cash is gladly accepted in person upon delivery of your sharpened knives.</p>
+          <span class="action-text" style="color: var(--muted); cursor: default;">Upon Delivery</span>
+        </div>
+
+        <!-- Venmo Card (Linkable) -->
+        <a href="https://venmo.com/mattsjohnson56" target="_blank" class="method-card linkable">
+          <div class="icon-wrapper" style="background: transparent; border: none; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+            <!-- Venmo App Logo Image -->
+            <img src="venmo-logo.png" alt="Venmo" class="card-icon" style="width: 50px; height: 50px; border-radius: 10px;" />
+          </div>
+          <h2 class="method-title">Venmo</h2>
+          <p class="method-desc">Pay directly via Venmo to username <strong>@mattsjohnson56</strong>. Click here to open our Venmo profile.</p>
+          <span class="action-text">Open @mattsjohnson56 &rarr;</span>
+        </a>
+      </div>
+
+      <!-- Action Button -->
+      <a href="contact-preferences.html" class="cta-button">Proceed to Contact Preferences</a>
+ 
+      <div class="back-container">
+        <a href="local-scheduling.html" class="back-link">
+          &larr; Back to Scheduling
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Vanguard Sharpening &middot; Matthew Johnson</footer>
+
+</body>
+
+</html>
