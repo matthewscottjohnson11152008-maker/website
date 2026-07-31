@@ -390,6 +390,54 @@
       margin-bottom: 1.6rem;
     }
 
+    /* Contact Venmo Box Styles */
+    .contact-venmo-box {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      background: rgba(201, 168, 76, 0.03);
+      border: 1px dashed rgba(201, 168, 76, 0.3);
+      border-radius: 4px;
+      padding: 1.2rem;
+      margin-top: 1.8rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .contact-venmo-logo {
+      height: 34px;
+      width: auto;
+      border-radius: 6px;
+      display: block;
+    }
+
+    .contact-venmo-details {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .contact-venmo-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-venmo-username {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gold-lt);
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+
+    .contact-venmo-username:hover {
+      color: var(--white);
+    }
+
     .contact-table {
       width: 100%;
       border-collapse: collapse;
@@ -1324,7 +1372,14 @@
           <td>Private workshop &middot; by appointment</td>
         </tr>
       </table>
-      <a class="btn" href="mailto:vanguardsharpening88@gmail.com">Send a Message</a>
+      <!-- Venmo Info Box -->
+      <div class="contact-venmo-box">
+        <img src="venmo-logo.png" alt="Venmo" class="contact-venmo-logo" />
+        <div class="contact-venmo-details">
+          <span class="contact-venmo-label">Venmo Account</span>
+          <a href="https://venmo.com/mattsjohnson56" target="_blank" class="contact-venmo-username">@mattsjohnson56</a>
+        </div>
+      </div>
     </div>
   </section>
 
