@@ -573,18 +573,22 @@
     /* Segmented Progress Tracker */
     .progress-tracker {
       display: flex;
-      gap: 0.8rem;
-      max-width: 750px;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 0.5rem;
+      max-width: 680px;
+      width: 100%;
       margin: 0 auto 3rem;
-      padding: 0 1rem;
+      padding: 0;
     }
 
     .progress-segment {
-      flex: 1;
+      flex: 1 1 0%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      position: relative;
+      text-align: center;
+      min-width: 0;
     }
 
     .segment-bar {
@@ -620,12 +624,15 @@
 
     .segment-label {
       margin-top: 0.6rem;
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       font-weight: 600;
       letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--muted);
       transition: color 0.4s;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      width: 100%;
     }
 
     .progress-segment.active .segment-label {
@@ -1062,12 +1069,7 @@
       </div>
     </div>
 
-    <!-- Shipping Notice -->
-    <div class="shipping-notice">
-      <div class="shipping-notice-title">&#9432;&nbsp; Shipping &amp; Drop-off Information</div>
-      <p>Rates above cover sharpening services only. If shipping blades to us, shipping is your responsibility both ways. We highly recommend packing blades securely with heavy cardboard wrapping or padding.</p>
-      <p>If you are local to the <strong>Grand Rapids, Michigan</strong> area, contact Matthew to schedule a convenient local drop-off and pickup to save on postage costs.</p>
-    </div>
+
 
     <!-- Back Home Link -->
     <div class="back-home-container">

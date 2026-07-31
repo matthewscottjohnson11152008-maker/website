@@ -134,18 +134,22 @@
     /* Segmented Progress Tracker */
     .progress-tracker {
       display: flex;
-      gap: 1rem;
-      max-width: 500px;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 0.5rem;
+      max-width: 680px;
+      width: 100%;
       margin: 0 auto 2.5rem;
-      padding: 0 1rem;
+      padding: 0;
     }
 
     .progress-segment {
-      flex: 1;
+      flex: 1 1 0%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      position: relative;
+      text-align: center;
+      min-width: 0;
     }
 
     .segment-bar {
@@ -181,12 +185,15 @@
 
     .segment-label {
       margin-top: 0.6rem;
-      font-size: 0.68rem;
+      font-size: 0.58rem;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--muted);
       transition: color 0.4s;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      width: 100%;
     }
 
     .progress-segment.active .segment-label {
@@ -455,12 +462,14 @@
       emailBody += '--- BLADE ESTIMATE ---\n';
       if (estimate) {
         var cleanEstimate = estimate.replace('Hi Matthew,\n\nI would like to book a sharpening service. ', '');
+        // Clean out duplicate/generic proceed instruction and regards at the end of the estimate
+        cleanEstimate = cleanEstimate.replace('\n\nPlease let me know how to proceed.\n\nBest regards,', '');
         emailBody += cleanEstimate;
       } else {
         emailBody += 'Estimate details unavailable';
       }
       emailBody += '\n\n';
-      emailBody += 'Please let me know when and where I can drop off my blades.\n\n';
+      emailBody += 'Please let me know how to proceed.\n\n';
       emailBody += 'Best regards,\n';
       emailBody += (details.name || '');
 

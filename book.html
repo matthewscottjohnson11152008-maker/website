@@ -341,18 +341,22 @@
     /* Segmented Progress Tracker */
     .progress-tracker {
       display: flex;
-      gap: 1rem;
-      max-width: 500px;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 0.5rem;
+      max-width: 680px;
+      width: 100%;
       margin: 0 auto 3rem;
-      padding: 0 1rem;
+      padding: 0;
     }
 
     .progress-segment {
-      flex: 1;
+      flex: 1 1 0%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      position: relative;
+      text-align: center;
+      min-width: 0;
     }
 
     .segment-bar {
@@ -388,12 +392,15 @@
 
     .segment-label {
       margin-top: 0.6rem;
-      font-size: 0.68rem;
+      font-size: 0.58rem;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--muted);
       transition: color 0.4s;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      width: 100%;
     }
 
     .progress-segment.active .segment-label {
@@ -467,8 +474,8 @@
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
           </div>
-          <h2 class="option-title">Local Drop-off</h2>
-          <p class="option-desc">Drop your blades off in Grand Rapids, MI. Convenient scheduling, personal hand-off, and local turnaround.</p>
+          <h2 class="option-title">Local Service</h2>
+          <p class="option-desc">Local sharpening service in Grand Rapids, MI. Convenient scheduling, personal pick-up and delivery, and expert local turnaround.</p>
         </a>
 
         <!-- Mail-in Option Card -->
