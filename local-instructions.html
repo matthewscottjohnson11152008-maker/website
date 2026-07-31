@@ -104,77 +104,36 @@
       position: relative;
     }
 
-    /* Segmented Progress Tracker */
-    .progress-tracker {
+    /* Creative Minimal Progress Chart */
+    .progress-chart {
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      gap: 0.5rem;
-      max-width: 680px;
-      width: 100%;
-      margin: 0 auto 2.5rem;
-      padding: 0;
-    }
-
-    .progress-segment {
-      flex: 1 1 0%;
-      display: flex;
-      flex-direction: column;
       align-items: center;
-      text-align: center;
-      min-width: 0;
-    }
-
-    .segment-bar {
-      height: 4px;
-      width: 100%;
-      background: rgba(201, 168, 76, 0.15);
-      border-radius: 2px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.4s ease;
-    }
-
-    .segment-bar::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0%;
-      background: var(--gold);
-      transition: width 0.4s ease;
-    }
-
-    .progress-segment.active .segment-bar::after {
-      width: 100%;
-      box-shadow: 0 0 8px rgba(232, 203, 106, 0.6);
-    }
-
-    .progress-segment.completed .segment-bar::after {
-      width: 100%;
-      background: var(--gold-lt);
-    }
-
-    .segment-label {
-      margin-top: 0.6rem;
-      font-size: 0.58rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 0 auto 2.5rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
+      padding: 0 1rem;
+    }
+
+    .progress-chart-step {
+      font-weight: 500;
       color: var(--muted);
-      transition: color 0.4s;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      width: 100%;
+      transition: color 0.3s;
     }
 
-    .progress-segment.active .segment-label {
-      color: var(--white);
-    }
-
-    .progress-segment.completed .segment-label {
+    .progress-chart-step.active {
+      font-weight: 700;
       color: var(--gold-lt);
+      text-shadow: 0 0 10px rgba(232, 203, 106, 0.4);
+    }
+
+    .progress-chart-separator {
+      color: rgba(201, 168, 76, 0.3);
+      font-weight: 600;
     }
 
     /* Thank you banner */
@@ -292,6 +251,17 @@
       line-height: 1.6;
     }
 
+    .instructions-venmo-link {
+      color: var(--gold-lt);
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .instructions-venmo-link:hover {
+      color: var(--white);
+    }
+
     /* Actions */
     .actions-section {
       text-align: center;
@@ -378,35 +348,8 @@
     <div class="instructions-card">
       
       <!-- Progress Indicator -->
-      <div class="progress-tracker">
-        <div class="progress-segment completed" id="step-estimate">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Estimate</div>
-        </div>
-        <div class="progress-segment completed" id="step-routing">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Routing</div>
-        </div>
-        <div class="progress-segment completed" id="step-credentials">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Credentials</div>
-        </div>
-        <div class="progress-segment completed" id="step-scheduling">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Scheduling</div>
-        </div>
-        <div class="progress-segment completed" id="step-payment">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Payment</div>
-        </div>
-        <div class="progress-segment completed" id="step-preferences">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Preferences</div>
-        </div>
-        <div class="progress-segment active" id="step-instructions">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Instructions</div>
-        </div>
+      <div class="progress-chart">
+        <span class="progress-chart-step active">Instructions</span>
       </div>
 
       <!-- Thank You Header -->
@@ -490,7 +433,7 @@
           </div>
           <h3 class="step-card-title">4. Post-Delivery Payment</h3>
           <p class="step-card-desc">
-            Submit cash payment upon delivery, or pay electronically via Venmo to <strong>@mattsjohnson56</strong> once your sharpened blades are returned.
+            Submit cash payment upon delivery, or pay electronically via Venmo to <a href="https://venmo.com/mattsjohnson56" target="_blank" class="instructions-venmo-link">@mattsjohnson56</a> once your sharpened blades are returned.
           </p>
         </div>
 

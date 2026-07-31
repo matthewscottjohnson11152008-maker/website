@@ -124,82 +124,147 @@
       text-align: center;
     }
 
-    /* Segmented Progress Tracker */
-    .progress-tracker {
+    /* Creative Minimal Progress Chart */
+    .progress-chart {
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      gap: 0.5rem;
-      max-width: 680px;
-      width: 100%;
-      margin: 0 auto 2.5rem;
-      padding: 0;
-    }
-
-    .progress-segment {
-      flex: 1 1 0%;
-      display: flex;
-      flex-direction: column;
       align-items: center;
-      text-align: center;
-      min-width: 0;
-    }
-
-    .segment-bar {
-      height: 4px;
-      width: 100%;
-      background: rgba(201, 168, 76, 0.15);
-      border-radius: 2px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.4s ease;
-    }
-
-    .segment-bar::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0%;
-      background: var(--gold);
-      transition: width 0.4s ease;
-    }
-
-    .progress-segment.active .segment-bar::after {
-      width: 100%;
-      box-shadow: 0 0 8px rgba(232, 203, 106, 0.6);
-    }
-
-    .progress-segment.completed .segment-bar::after {
-      width: 100%;
-      background: var(--gold-lt);
-    }
-
-    .segment-label {
-      margin-top: 0.6rem;
-      font-size: 0.58rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 0 auto 2.5rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--muted);
-      transition: color 0.4s;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      width: 100%;
+      padding: 0 1rem;
     }
 
-    .progress-segment.active .segment-label {
+    .progress-chart-step {
+      font-weight: 500;
+      color: var(--muted);
+      transition: color 0.3s;
+    }
+
+    .progress-chart-step.active {
+      font-weight: 700;
+      color: var(--gold-lt);
+      text-shadow: 0 0 10px rgba(232, 203, 106, 0.4);
+    }
+
+    .progress-chart-separator {
+      color: rgba(201, 168, 76, 0.3);
+      font-weight: 600;
+    }
+    /* Custom Pop-out Calendar Styles */
+    .calendar-container {
+      background: rgba(13, 13, 13, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      padding: 0 0.5rem;
+    }
+
+    .calendar-month-year {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+
+    .cal-nav-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--gold-lt);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    .cal-nav-btn:hover:not(:disabled) {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.05);
       color: var(--white);
     }
 
-    .progress-segment.completed .segment-label {
+    .cal-nav-btn:disabled {
+      color: var(--muted);
+      border-color: rgba(201, 168, 76, 0.05);
+      cursor: not-allowed;
+      opacity: 0.3;
+    }
+
+    .calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.4rem;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--text);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .calendar-day:hover:not(.disabled):not(.selected) {
+      background: rgba(201, 168, 76, 0.1);
+      color: var(--gold-lt);
+    }
+
+    .calendar-day.selected {
+      background: var(--gold);
+      color: #0d0d0d;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(201, 168, 76, 0.4);
+    }
+
+    .calendar-day.disabled {
+      color: var(--muted);
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+
+    .calendar-day.today:not(.selected) {
+      border: 1px solid var(--gold-lt);
       color: var(--gold-lt);
     }
 
     /* Form Fields styling */
     .form-group {
-      margin-bottom: 1.8rem;
+      margin-bottom: 2.2rem;
       position: relative;
     }
 
@@ -210,7 +275,7 @@
       letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--gold-lt);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.8rem;
     }
 
     label.field-label span.req {
@@ -276,7 +341,7 @@
       border-radius: 4px;
       cursor: pointer;
       width: 100%;
-      margin-top: 1rem;
+      margin-top: 2rem;
     }
 
     .cta-button:hover {
@@ -292,7 +357,7 @@
 
     /* Back Link */
     .back-container {
-      margin-top: 1.8rem;
+      margin-top: 2.2rem;
       text-align: center;
     }
 
@@ -341,46 +406,34 @@
     <div class="form-card">
       
       <!-- Progress Indicator -->
-      <div class="progress-tracker">
-        <div class="progress-segment completed" id="step-estimate">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Estimate</div>
-        </div>
-        <div class="progress-segment completed" id="step-routing">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Routing</div>
-        </div>
-        <div class="progress-segment completed" id="step-credentials">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Credentials</div>
-        </div>
-        <div class="progress-segment active" id="step-scheduling">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Scheduling</div>
-        </div>
-        <div class="progress-segment" id="step-payment">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Payment</div>
-        </div>
-        <div class="progress-segment" id="step-preferences">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Preferences</div>
-        </div>
-        <div class="progress-segment" id="step-instructions">
-          <div class="segment-bar"></div>
-          <div class="segment-label">Instructions</div>
-        </div>
+      <div class="progress-chart">
+        <span class="progress-chart-step active">Scheduling</span>
+        <span class="progress-chart-separator">...</span>
+        <span class="progress-chart-step">Payment</span>
+        <span class="progress-chart-separator">...</span>
+        <span class="progress-chart-step">Preferences</span>
       </div>
 
       <p class="label">Local Booking</p>
       <h1>Schedule Pickup</h1>
 
       <form id="pickupScheduleForm" novalidate>
-        <!-- Date Picker -->
+        <!-- Date Picker (Pop-out Calendar) -->
         <div class="form-group">
-          <label class="field-label" for="pickupDate">Pickup Date<span class="req">*</span></label>
-          <input type="date" id="pickupDate" class="form-input" required />
-          <div class="error-msg" id="dateError">Please select a valid pickup date.</div>
+          <label class="field-label">Pickup Date<span class="req">*</span></label>
+          <div class="calendar-container">
+            <div class="calendar-header">
+              <button type="button" class="cal-nav-btn" id="prevMonthBtn" disabled>&larr;</button>
+              <span class="calendar-month-year" id="monthYearTitle"></span>
+              <button type="button" class="cal-nav-btn" id="nextMonthBtn">&rarr;</button>
+            </div>
+            <div class="calendar-weekdays">
+              <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+            </div>
+            <div class="calendar-days" id="calendarDaysGrid"></div>
+          </div>
+          <input type="hidden" id="pickupDate" required />
+          <div class="error-msg" id="dateError" style="margin-top: 0.8rem;">Please select a pickup date from the calendar.</div>
         </div>
 
         <!-- Time Dropdown -->
@@ -418,18 +471,44 @@
       var dateError = document.getElementById('dateError');
       var timeError = document.getElementById('timeError');
 
-      // Set min date to today
-      var todayStr = new Date().toISOString().split('T')[0];
-      dateInput.setAttribute('min', todayStr);
+      var prevMonthBtn = document.getElementById('prevMonthBtn');
+      var nextMonthBtn = document.getElementById('nextMonthBtn');
+      var monthYearTitle = document.getElementById('monthYearTitle');
+      var calendarDaysGrid = document.getElementById('calendarDaysGrid');
 
-      // Populate saved values if present
+      // Date limits (using local time instead of UTC to avoid tomorrow/yesterday shifts)
+      var today = new Date();
+      var yyyy = today.getFullYear();
+      var mm = String(today.getMonth() + 1).padStart(2, '0');
+      var dd = String(today.getDate()).padStart(2, '0');
+      var todayStr = yyyy + '-' + mm + '-' + dd;
+
+      // Calendar state
+      var currentYear = today.getFullYear();
+      var currentMonth = today.getMonth();
+      var selectedDateStr = todayStr; // Pre-select today's date initially!
+      dateInput.value = todayStr;
+
+      var monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+
+      // Retrieve cached values
       var savedSchedule = localStorage.getItem('localSchedule');
       if (savedSchedule) {
         try {
           var schedule = JSON.parse(savedSchedule);
-          // Check that date is still valid (not in past)
           if (schedule.date >= todayStr) {
-            dateInput.value = schedule.date || '';
+            selectedDateStr = schedule.date || todayStr;
+            dateInput.value = selectedDateStr;
+            
+            // Navigate calendar to saved date month
+            var parsed = new Date(selectedDateStr + 'T00:00:00');
+            if (!isNaN(parsed.getTime())) {
+              currentYear = parsed.getFullYear();
+              currentMonth = parsed.getMonth();
+            }
           }
           timeSelect.value = schedule.time || '';
         } catch(e) {
@@ -437,11 +516,99 @@
         }
       }
 
+      function renderCalendar() {
+        monthYearTitle.textContent = monthNames[currentMonth] + ' ' + currentYear;
+
+        // Disable previous month button if showing current month
+        if (currentYear === today.getFullYear() && currentMonth === today.getMonth()) {
+          prevMonthBtn.disabled = true;
+        } else {
+          prevMonthBtn.disabled = false;
+        }
+
+        calendarDaysGrid.innerHTML = '';
+
+        // Pad first weekday elements
+        var firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
+        for (var i = 0; i < firstDayIndex; i++) {
+          var padCell = document.createElement('div');
+          padCell.className = 'calendar-day disabled';
+          calendarDaysGrid.appendChild(padCell);
+        }
+
+        // Render month days
+        var daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        for (var day = 1; day <= daysInMonth; day++) {
+          var dayCell = document.createElement('div');
+          dayCell.className = 'calendar-day';
+          dayCell.textContent = day;
+
+          // Format day date string
+          var monthStr = (currentMonth + 1 < 10) ? '0' + (currentMonth + 1) : (currentMonth + 1);
+          var dayStr = (day < 10) ? '0' + day : day;
+          var cellDateStr = currentYear + '-' + monthStr + '-' + dayStr;
+
+          // Highlight selected day
+          if (cellDateStr === selectedDateStr) {
+            dayCell.classList.add('selected');
+          }
+
+          // Highlight today
+          if (cellDateStr === todayStr) {
+            dayCell.classList.add('today');
+          }
+
+          // Disable past days
+          if (cellDateStr < todayStr) {
+            dayCell.classList.add('disabled');
+          } else {
+            (function(dateVal) {
+              dayCell.addEventListener('click', function() {
+                // Clear previous selected highlights
+                var prevSelected = calendarDaysGrid.querySelector('.calendar-day.selected');
+                if (prevSelected) prevSelected.classList.remove('selected');
+
+                this.classList.add('selected');
+                selectedDateStr = dateVal;
+                dateInput.value = dateVal;
+                dateInput.classList.remove('input-error');
+                dateError.style.display = 'none';
+              });
+            })(cellDateStr);
+          }
+
+          calendarDaysGrid.appendChild(dayCell);
+        }
+      }
+
+      // Nav handlers
+      prevMonthBtn.addEventListener('click', function() {
+        if (currentMonth === 0) {
+          currentMonth = 11;
+          currentYear--;
+        } else {
+          currentMonth--;
+        }
+        renderCalendar();
+      });
+
+      nextMonthBtn.addEventListener('click', function() {
+        if (currentMonth === 11) {
+          currentMonth = 0;
+          currentYear++;
+        } else {
+          currentMonth++;
+        }
+        renderCalendar();
+      });
+
+      // Initial draw
+      renderCalendar();
+
       form.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        // Reset
-        dateInput.classList.remove('input-error');
+        // Reset error formatting
         timeSelect.classList.remove('input-error');
         dateError.style.display = 'none';
         timeError.style.display = 'none';
@@ -451,12 +618,6 @@
         var timeVal = timeSelect.value;
 
         if (!dateVal) {
-          dateInput.classList.add('input-error');
-          dateError.style.display = 'block';
-          isValid = false;
-        } else if (dateVal < todayStr) {
-          dateInput.classList.add('input-error');
-          dateError.textContent = 'Please choose today or a future date.';
           dateError.style.display = 'block';
           isValid = false;
         }
