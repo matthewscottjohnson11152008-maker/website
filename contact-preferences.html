@@ -276,6 +276,97 @@
       color: rgba(201, 168, 76, 0.3);
       font-weight: 600;
     }
+
+    /* Menu Toggle (Hamburger) */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 6px;
+      width: 30px;
+      height: 30px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 100;
+    }
+
+    .menu-toggle span {
+      display: block;
+      height: 2px;
+      background: var(--gold);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .menu-toggle span:nth-child(1) {
+      width: 24px;
+    }
+
+    .menu-toggle span:nth-child(2) {
+      width: 16px;
+    }
+
+    .menu-toggle.open span:nth-child(1) {
+      transform: translateY(4px) rotate(45deg);
+      width: 24px;
+    }
+
+    .menu-toggle.open span:nth-child(2) {
+      transform: translateY(-4px) rotate(-45deg);
+      width: 24px;
+    }
+
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    @media (max-width: 700px) {
+      nav {
+        justify-content: space-between;
+        padding: 0 1.5rem;
+      }
+
+      .nav-brand {
+        margin: 0;
+        text-align: left;
+        position: relative;
+        z-index: 100;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      .nav-links {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(13, 13, 13, 0.98);
+        backdrop-filter: blur(10px);
+        gap: 2.5rem;
+        z-index: 90;
+        transform: translateY(-100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        padding: 2rem;
+      }
+
+      .nav-links.open {
+        transform: translateY(0);
+      }
+
+      .nav-links a {
+        font-size: 1.25rem;
+        letter-spacing: 0.15em;
+      }
+    }
   </style>
 </head>
 
@@ -290,6 +381,10 @@
       <li><a href="index.html#reviews">Reviews</a></li>
       <li><a href="index.html#contact">Contact</a></li>
     </ul>
+    <button class="menu-toggle" aria-label="Toggle Menu">
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
   <div class="pref-wrapper">
@@ -427,6 +522,30 @@
         window.open(smsUrl, '_blank');
         window.location.href = 'local-instructions.html';
       });
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuToggle = document.querySelector('.menu-toggle');
+      const navLinks = document.querySelector('.nav-links');
+      const navItems = document.querySelectorAll('.nav-links a');
+
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+          menuToggle.classList.toggle('open');
+          navLinks.classList.toggle('open');
+          document.body.classList.toggle('menu-open');
+        });
+
+        navItems.forEach(item => {
+          item.addEventListener('click', () => {
+            menuToggle.classList.remove('open');
+            navLinks.classList.remove('open');
+            document.body.classList.remove('menu-open');
+          });
+        });
+      }
     });
   </script>
 
