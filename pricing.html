@@ -358,21 +358,65 @@
       color: var(--muted);
     }
 
-    .calc-qty-input {
+    .qty-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
       background: rgba(13, 13, 13, 0.8);
       border: 1px solid var(--border);
-      color: var(--white);
-      padding: 0.5rem;
       border-radius: 4px;
+      padding: 3px;
+    }
+
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      font-size: 1.2rem;
+      font-weight: 600;
+      line-height: 1;
+      border-radius: 3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .qty-btn:hover {
+      background: var(--gold);
+      color: #0d0d0d;
+    }
+
+    .qty-btn:active {
+      transform: scale(0.92);
+    }
+
+    .calc-qty-input {
+      width: 48px;
+      background: transparent;
+      border: none;
+      color: var(--white);
+      padding: 0.3rem 0.1rem;
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 1rem;
+      font-weight: 600;
       text-align: center;
       outline: none;
-      transition: border-color 0.2s;
+      -moz-appearance: textfield;
+    }
+
+    .calc-qty-input::-webkit-outer-spin-button,
+    .calc-qty-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     .calc-qty-input:focus {
-      border-color: var(--gold);
+      color: var(--gold-lt);
     }
 
     .calc-results {
@@ -701,7 +745,6 @@
         <button class="filter-chip active" onclick="setFilter('all', this)">All Items</button>
         <button class="filter-chip" onclick="setFilter('kitchen', this)">Kitchen</button>
         <button class="filter-chip" onclick="setFilter('scissors', this)">Scissors &amp; Shears</button>
-        <button class="filter-chip" onclick="setFilter('outdoor', this)">Outdoor &amp; Pocket</button>
         <button class="filter-chip" onclick="setFilter('garden', this)">Garden Tools</button>
         <button class="filter-chip" onclick="setFilter('woodworking', this)">Woodworking</button>
         <button class="filter-chip" onclick="setFilter('specialty', this)">Specialty</button>
@@ -757,7 +800,7 @@
               <div class="service-desc">Yanagiba, Deba, Usuba. Hand whetstone hone.</div>
             </div>
             <div class="service-price-block">
-              <span class="service-price">$15.00</span>
+              <span class="service-price">$8.00</span>
               <span class="service-price-unit">per knife</span>
             </div>
           </div>
@@ -779,77 +822,12 @@
         <div class="service-list">
           <div class="service-item">
             <div>
-              <div class="service-name">Household &amp; Kitchen Shears</div>
-              <div class="service-desc">Standard utility and cooking scissors.</div>
-            </div>
-            <div class="service-price-block">
-              <span class="service-price">$8.00</span>
-              <span class="service-price-unit">per pair</span>
-            </div>
-          </div>
-          <div class="service-item">
-            <div>
-              <div class="service-name">Fabric &amp; Sewing Scissors</div>
-              <div class="service-desc">Tailor shears, fabric shears, sewing scissors.</div>
+              <div class="service-name">Scissors &amp; Shears</div>
+              <div class="service-desc">Household, kitchen, fabric, sewing, pinking, and grooming shears.</div>
             </div>
             <div class="service-price-block">
               <span class="service-price">$10.00</span>
               <span class="service-price-unit">per pair</span>
-            </div>
-          </div>
-          <div class="service-item">
-            <div>
-              <div class="service-name">Pinking Shears</div>
-              <div class="service-desc">Saw-tooth pattern sewing scissors.</div>
-            </div>
-            <div class="service-price-block">
-              <span class="service-price">$12.00</span>
-              <span class="service-price-unit">per pair</span>
-            </div>
-          </div>
-          <div class="service-item">
-            <div>
-              <div class="service-name">Barber &amp; Salon Shears</div>
-              <div class="service-desc">Convex/bevel hair grooming shears.</div>
-            </div>
-            <div class="service-price-block">
-              <span class="service-price">$25.00</span>
-              <span class="service-price-unit">per pair</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Outdoor & Pocket Card -->
-      <div class="price-card" data-category="outdoor" data-keywords="outdoor pocket folding hunting survival edc tactical knife blades camp">
-        <div class="card-header">
-          <svg class="pricing-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 29 C4 27 6 27 8 27 L20 27 L20 37 L8 37 C6 37 4 37 4 35 Z" fill="var(--surface)" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-            <path d="M4 25 L4 39" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
-            <path d="M20 20 C21 28 21 36 20 44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
-            <path d="M22 26 L42 26 C46 27 52 30 60 32 C50 36 42 38 22 38 Z" fill="rgba(201, 168, 76, 0.1)" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-          </svg>
-          <span>Outdoor &amp; Pocket</span>
-        </div>
-        <div class="service-list">
-          <div class="service-item">
-            <div>
-              <div class="service-name">Pocket &amp; EDC Knives</div>
-              <div class="service-desc">Folding, tactical, everyday carry pocket knives.</div>
-            </div>
-            <div class="service-price-block">
-              <span class="service-price">$8.00</span>
-              <span class="service-price-unit">per knife</span>
-            </div>
-          </div>
-          <div class="service-item">
-            <div>
-              <div class="service-name">Hunting &amp; Fixed Blades</div>
-              <div class="service-desc">Survival, skinning, and camping knives.</div>
-            </div>
-            <div class="service-price-block">
-              <span class="service-price">$10.00</span>
-              <span class="service-price-unit">per knife</span>
             </div>
           </div>
         </div>
@@ -867,16 +845,6 @@
           <span>Garden &amp; Yard Tools</span>
         </div>
         <div class="service-list">
-          <div class="service-item">
-            <div>
-              <div class="service-name">Pruning Shears &amp; Loppers</div>
-              <div class="service-desc">Hand pruners, anvil loppers, bypass loppers.</div>
-            </div>
-            <div class="service-price-block">
-              <span class="service-price">$8.00</span>
-              <span class="service-price-unit">per tool</span>
-            </div>
-          </div>
           <div class="service-item">
             <div>
               <div class="service-name">Hedge Shears</div>
@@ -961,7 +929,7 @@
               <div class="service-desc">Shaving razors, meticulously honed and stropped.</div>
             </div>
             <div class="service-price-block">
-              <span class="service-price">$20.00</span>
+              <span class="service-price">$10.00</span>
               <span class="service-price-unit">per razor</span>
             </div>
           </div>
@@ -990,7 +958,7 @@
       <div class="calc-title-area">
         <p class="label">Interactive Estimate</p>
         <h2>Estimate Your Total</h2>
-        <p style="color:var(--muted); font-size:0.92rem;">Enter your counts below. Volume discounts for kitchen knives are calculated automatically.</p>
+        <p style="color:var(--muted); font-size:0.92rem;">Enter your counts below. Maximum total price cap of $200.00 applies to all orders!</p>
       </div>
       <div class="calc-grid">
         <div class="calc-inputs">
@@ -999,42 +967,66 @@
               <span class="calc-label">Straight Kitchen Knives</span>
               <span class="calc-sublabel">Vol. discount: $8.00 (1-4) | $6.50 (5-19) | $5.00 (20+)</span>
             </div>
-            <input type="number" id="qty-straight" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" />
+            <div class="qty-control">
+              <button type="button" class="qty-btn" onclick="changeQty('qty-straight', -1)">&minus;</button>
+              <input type="number" id="qty-straight" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" onfocus="this.select()" />
+              <button type="button" class="qty-btn" onclick="changeQty('qty-straight', 1)">&plus;</button>
+            </div>
           </div>
           <div class="calc-row">
             <div class="calc-label-block">
               <span class="calc-label">Serrated Kitchen Knives</span>
               <span class="calc-sublabel">Vol. discount: $10.00 (1-4) | $8.00 (5-10) | $6.00 (11+)</span>
             </div>
-            <input type="number" id="qty-serrated" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" />
-          </div>
-          <div class="calc-row">
-            <div class="calc-label-block">
-              <span class="calc-label">Pocket &amp; Hunting Knives</span>
-              <span class="calc-sublabel">Avg rate: $9.00 per knife</span>
+            <div class="qty-control">
+              <button type="button" class="qty-btn" onclick="changeQty('qty-serrated', -1)">&minus;</button>
+              <input type="number" id="qty-serrated" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" onfocus="this.select()" />
+              <button type="button" class="qty-btn" onclick="changeQty('qty-serrated', 1)">&plus;</button>
             </div>
-            <input type="number" id="qty-pocket" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" />
           </div>
           <div class="calc-row">
             <div class="calc-label-block">
               <span class="calc-label">Scissors &amp; Shears</span>
-              <span class="calc-sublabel">Avg rate: $10.00 per pair</span>
+              <span class="calc-sublabel">Flat rate: $10.00 per pair</span>
             </div>
-            <input type="number" id="qty-scissors" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" />
+            <div class="qty-control">
+              <button type="button" class="qty-btn" onclick="changeQty('qty-scissors', -1)">&minus;</button>
+              <input type="number" id="qty-scissors" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" onfocus="this.select()" />
+              <button type="button" class="qty-btn" onclick="changeQty('qty-scissors', 1)">&plus;</button>
+            </div>
+          </div>
+          <div class="calc-row">
+            <div class="calc-label-block">
+              <span class="calc-label">Specialty Blades</span>
+              <span class="calc-sublabel">Straight razors ($10.00) &amp; pizza wheels ($8.00)</span>
+            </div>
+            <div class="qty-control">
+              <button type="button" class="qty-btn" onclick="changeQty('qty-specialty', -1)">&minus;</button>
+              <input type="number" id="qty-specialty" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" onfocus="this.select()" />
+              <button type="button" class="qty-btn" onclick="changeQty('qty-specialty', 1)">&plus;</button>
+            </div>
           </div>
           <div class="calc-row">
             <div class="calc-label-block">
               <span class="calc-label">Axes &amp; Hatchets</span>
               <span class="calc-sublabel">Flat rate: $12.00 per tool</span>
             </div>
-            <input type="number" id="qty-axes" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" />
+            <div class="qty-control">
+              <button type="button" class="qty-btn" onclick="changeQty('qty-axes', -1)">&minus;</button>
+              <input type="number" id="qty-axes" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" onfocus="this.select()" />
+              <button type="button" class="qty-btn" onclick="changeQty('qty-axes', 1)">&plus;</button>
+            </div>
           </div>
           <div class="calc-row">
             <div class="calc-label-block">
               <span class="calc-label">Woodworking &amp; Tool Blades</span>
               <span class="calc-sublabel">Avg rate: $8.00 per tool</span>
             </div>
-            <input type="number" id="qty-woodworking" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" />
+            <div class="qty-control">
+              <button type="button" class="qty-btn" onclick="changeQty('qty-woodworking', -1)">&minus;</button>
+              <input type="number" id="qty-woodworking" class="calc-qty-input" min="0" value="0" oninput="calculateTotal()" onfocus="this.select()" />
+              <button type="button" class="qty-btn" onclick="changeQty('qty-woodworking', 1)">&plus;</button>
+            </div>
           </div>
         </div>
 
@@ -1129,12 +1121,21 @@
       }
     }
 
+    function changeQty(id, delta) {
+      var input = document.getElementById(id);
+      if (!input) return;
+      var currentVal = parseInt(input.value) || 0;
+      var newVal = Math.max(0, currentVal + delta);
+      input.value = newVal;
+      calculateTotal();
+    }
+
     function calculateTotal() {
       // Inputs
       var straightQty = parseInt(document.getElementById('qty-straight').value) || 0;
       var serratedQty = parseInt(document.getElementById('qty-serrated').value) || 0;
-      var pocketQty = parseInt(document.getElementById('qty-pocket').value) || 0;
       var scissorsQty = parseInt(document.getElementById('qty-scissors').value) || 0;
+      var specialtyQty = parseInt(document.getElementById('qty-specialty').value) || 0;
       var axesQty = parseInt(document.getElementById('qty-axes').value) || 0;
       var woodworkingQty = parseInt(document.getElementById('qty-woodworking').value) || 0;
 
@@ -1156,12 +1157,14 @@
       }
       serratedTotal = serratedQty * serratedRate;
 
-      var pocketTotal = pocketQty * 9.00; // average of pocket ($8) and hunting ($10)
       var scissorsTotal = scissorsQty * 10.00;
+      var specialtyTotal = specialtyQty * 9.00;
       var axesTotal = axesQty * 12.00;
       var woodworkingTotal = woodworkingQty * 8.00;
 
-      var total = straightTotal + serratedTotal + pocketTotal + scissorsTotal + axesTotal + woodworkingTotal;
+      var rawTotal = straightTotal + serratedTotal + scissorsTotal + specialtyTotal + axesTotal + woodworkingTotal;
+      var isCapped = rawTotal > 200;
+      var total = isCapped ? 200 : rawTotal;
 
       // Update total element
       document.getElementById('calcTotal').textContent = '$' + total.toFixed(2);
@@ -1177,11 +1180,11 @@
       if (serratedQty > 0) {
         items.push({ name: 'Serrated Kitchen Knives', qty: serratedQty, rate: serratedRate, total: serratedTotal });
       }
-      if (pocketQty > 0) {
-        items.push({ name: 'Pocket / Hunting Knives', qty: pocketQty, rate: 9.00, total: pocketTotal });
-      }
       if (scissorsQty > 0) {
         items.push({ name: 'Scissors & Shears', qty: scissorsQty, rate: 10.00, total: scissorsTotal });
+      }
+      if (specialtyQty > 0) {
+        items.push({ name: 'Specialty Blades', qty: specialtyQty, rate: 9.00, total: specialtyTotal });
       }
       if (axesQty > 0) {
         items.push({ name: 'Axes & Hatchets', qty: axesQty, rate: 12.00, total: axesTotal });
@@ -1203,6 +1206,13 @@
         row.innerHTML = '<span>' + item.qty + 'x ' + item.name + '</span><span>$' + item.total.toFixed(2) + '</span>';
         breakdownEl.appendChild(row);
       });
+
+      if (isCapped) {
+        var capNote = document.createElement('div');
+        capNote.style.cssText = 'color: var(--gold-lt); font-size: 0.82rem; font-weight: 600; text-align: center; margin-top: 0.8rem; background: rgba(201, 168, 76, 0.12); border: 1px solid var(--border); padding: 0.45rem; border-radius: 4px;';
+        capNote.textContent = '★ Maximum Price Cap Applied ($200.00 Max)';
+        breakdownEl.appendChild(capNote);
+      }
 
       // Prepare email body details
       var emailBody = 'Hi Matthew,\n\nI would like to book a sharpening service. Here is my estimated list of blades:\n';
